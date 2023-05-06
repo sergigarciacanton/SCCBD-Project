@@ -1,0 +1,73 @@
+<div class="container mt-5">
+  <div class="col-lg-8 offset-lg-2">
+    <div class="card">
+      <div class="card-body text-center">
+        <div class="container">
+          <div class="col-sm">
+            <span class="title">USER'S DASHBOARD</span>
+            <div
+              class="mt-3"
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+                flex-direction: row;
+              "
+            >
+              <label style="width: 145px">My public key:</label>
+              <input
+                type="text"
+                id="pubKey"
+                class="form-control form-control-lg"
+                style="margin-left: 1em; padding: 0.5em; margin-bottom: 0.5em"
+              />
+            </div>
+            <div
+              class="mt-3"
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+                flex-direction: row;
+              "
+            >
+              <label style="width: 155px">My private key:</label>
+              <input
+                type="text"
+                id="privKey"
+                class="form-control form-control-lg"
+                style="margin-left: 1em; padding: 0.5em; margin-bottom: 0.5em"
+              />
+            </div>
+            <div class="row">
+              <div class="col">
+                <button
+                  routerLink="/encrypt-decrypt"
+                  class="btn btn-secondary btn-lg float-start"
+                >
+                  Encrypt & Decrypt
+                </button>
+              </div>
+              <div class="col">
+                <button
+                  routerLink="/sign-verify"
+                  class="btn btn-secondary btn-lg float-start"
+                >
+                  Sign & Verify
+                </button>
+              </div>
+              <div class="col">
+                <button
+                  routerLink="/blind-signature"
+                  class="btn btn-secondary btn-lg float-start"
+                >
+                  Blind Signatures
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

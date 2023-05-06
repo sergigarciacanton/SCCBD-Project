@@ -1,0 +1,75 @@
+<div class="container mt-5">
+  <div class="col-lg-8 offset-lg-2">
+    <div class="card">
+      <div class="card-body text-center">
+        <div class="container">
+          <div class="col-sm">
+            <span class="title"> ENCRYPT & DECRYPT </span>
+            <form class="mt-3" [formGroup]="encryptForm" (ngSubmit)="encrypt()">
+              <div class="row">
+                <div class="col">
+                  <input
+                    type="text"
+                    formControlName="message"
+                    class="form-control form-control-lg"
+                    placeholder="Message to encrypt"
+                  />
+                </div>
+                <div class="col" style="flex: 0 0 100px">
+                  <button
+                    type="submit"
+                    [disabled]="encryptForm.invalid"
+                    class="btn btn-success btn-lg float-end"
+                  >
+                    Encrypt
+                  </button>
+                </div>
+              </div>
+            </form>
+            <form class="mt-3" [formGroup]="decryptForm" (ngSubmit)="decrypt()">
+              <div class="row">
+                <div class="col">
+                  <input
+                    type="text"
+                    formControlName="ciphertext"
+                    class="form-control form-control-lg"
+                    placeholder="Ciphertext to decrypt (result from encryption)"
+                  />
+                </div>
+                <div class="col" style="flex: 0 0 100px">
+                  <button
+                    type="submit"
+                    [disabled]="decryptForm.invalid"
+                    class="btn btn-success btn-lg float-end"
+                  >
+                    Decrypt
+                  </button>
+                </div>
+              </div>
+            </form>
+            <div
+              class="mt-3"
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+                flex-direction: row;
+              "
+            >
+              <label style="width: 190px">Decryption result:</label>
+              <input
+                type="text"
+                id="resDecrypt"
+                class="form-control form-control-lg"
+                style="margin-left: 1em; padding: 0.5em; margin-bottom: 0.5em"
+              />
+            </div>
+            <button routerLink="/" class="btn btn-secondary btn-lg float-start">
+              Back to Dashboard
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
