@@ -1,11 +1,79 @@
 /* You can add global styles to this file, and also import other style files */
 body {
-    background: #C9D6FF;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #E2E2E2, #C9D6FF);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #E2E2E2, #C9D6FF); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-}
-
+    background: #4A5568;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #4A5568, #2D3748);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #4A5568, #2D3748); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    font-family: 'Montserrat', sans-serif;
+    color: #e2e8f0;
+    padding-top: -56px;
+  }
+  
 .title {
     font-size: 1.8rem;
     font-family: 'Montserrat', sans-serif;
+    color: #f6ad55;
+}
+  
+p {
+    line-height: 1.6;
+}
+  
+a {
+    color: #f6ad55;
+}
+  
+a:hover {
+    color: #dd9933;
+}
+
+.card.my-card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+    background: #1A202C;
+    color: #e2e8f0;
+    border-radius: 5px;
+    padding: 20px;
+    margin: auto;
+    width: 80%;
+    max-width: 1000px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.card.my-card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+.btn.btn-secondary.my-btn {
+    background-color: #f6ad55;
+    color: #1a202c;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+  
+.btn.btn-secondary.my-btn:hover {
+    background-color: #dd9933;
+    color: white;
+}
+
+.container-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* This makes the container take up at least the full height of the viewport */
+}
+
+@media (max-width: 768px) {
+    .title {
+        font-size: 1.2rem;
+    }
 }

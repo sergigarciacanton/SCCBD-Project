@@ -1,6 +1,6 @@
-<div class="container mt-5">
-  <div class="col-lg-8 offset-lg-2">
-    <div class="card">
+<div class="container mt-5 container-center">
+  <div class="col-lg-8 ">
+    <div class="card my-card">
       <div class="card-body text-center">
         <div class="container">
           <div class="col-sm">
@@ -19,7 +19,7 @@
                   <button
                     type="submit"
                     [disabled]="blindForm.invalid"
-                    class="btn btn-success btn-lg float-end"
+                    class="btn btn-secondary btn-lg float-start my-btn"
                   >
                     Blind
                   </button>
@@ -40,7 +40,7 @@
                   <button
                     type="submit"
                     [disabled]="signForm.invalid"
-                    class="btn btn-success btn-lg float-end"
+                    class="btn btn-secondary btn-lg float-start my-btn"
                   >
                     Sign
                   </button>
@@ -61,7 +61,7 @@
                   <button
                     type="submit"
                     [disabled]="unblindForm.invalid"
-                    class="btn btn-success btn-lg float-end"
+                    class="btn btn-secondary btn-lg float-start my-btn"
                   >
                     Unblind
                   </button>
@@ -82,7 +82,7 @@
                   <button
                     type="submit"
                     [disabled]="verifyForm.invalid"
-                    class="btn btn-success btn-lg float-end"
+                    class="btn btn-secondary btn-lg float-start my-btn"
                   >
                     Verify
                   </button>
@@ -106,7 +106,7 @@
                 style="margin-left: 1em; padding: 0.5em; margin-bottom: 0.5em"
               />
             </div>
-            <button routerLink="/" class="btn btn-secondary btn-lg float-start">
+            <button routerLink="/" class="btn btn-secondary btn-lg float-start my-btn">
               Back to Dashboard
             </button>
           </div>
