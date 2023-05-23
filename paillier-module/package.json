@@ -1,0 +1,27 @@
+{
+  "name": "paillier-module",
+  "version": "0.0.1",
+  "description": "My Paillier cryptosystem implementation",
+  "main": "./dist/cjs/index.js",
+  "browser": "./dist/esm/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:esm": "tsc -m \"es2020\" --outDir ./dist/esm",
+    "build:cjs": "tsc -m \"commonjs\" --outDir ./dist/cjs",
+    "build": "npm run build:esm && npm run build:cjs"
+  },
+  "keywords": [
+    "Paillier",
+    "encryption",
+    "crypto"
+  ],
+  "author": "Sergi Garcia",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "bigint-conversion": "^2.4.1",
+    "paillier-bigint": "^3.4.1"
+  }
+}
