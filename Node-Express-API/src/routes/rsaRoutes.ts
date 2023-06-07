@@ -25,30 +25,34 @@ class RsaRoutes {
 
   sign = (req: Request<any, any, rsa.JsonMessage>, res: Response): void => {
     const message: bigint = rsa.JsonMessage.fromJSON(req.body);
-    res
-      .status(200)
-      .json(rsa.JsonMessage.toJSON(this.keys.privKey.sign(message)));
+    console.log("Message to sign: ", message);
+    const signed: bigint = this.keys.privKey.sign(message);
+    console.log("Signed message: ", signed);
+    res.status(200).json(rsa.JsonMessage.toJSON(signed));
   };
 
   decrypt = (req: Request<any, any, rsa.JsonMessage>, res: Response): void => {
     const ciphertext: bigint = rsa.JsonMessage.fromJSON(req.body);
-    res
-      .status(200)
-      .json(rsa.JsonMessage.toJSON(this.keys.privKey.decrypt(ciphertext)));
+    console.log("Ciphertext to decrypt: ", ciphertext);
+    const decrypted: bigint = this.keys.privKey.decrypt(ciphertext);
+    console.log("Decrypted message: ", decrypted);
+    res.status(200).json(rsa.JsonMessage.toJSON(decrypted));
   };
 
   verify = (req: Request<any, any, rsa.JsonMessage>, res: Response): void => {
     const ciphertext: bigint = rsa.JsonMessage.fromJSON(req.body);
-    res
-      .status(200)
-      .json(rsa.JsonMessage.toJSON(this.keys.pubKey.verify(ciphertext)));
+    console.log("Ciphertext to verify: ", ciphertext);
+    const verified: bigint = this.keys.pubKey.verify(ciphertext);
+    console.log("Verified message: ", verified);
+    res.status(200).json(rsa.JsonMessage.toJSON(verified));
   };
 
   encrypt = (req: Request<any, any, rsa.JsonMessage>, res: Response): void => {
     const message: bigint = rsa.JsonMessage.fromJSON(req.body);
-    res
-      .status(200)
-      .json(rsa.JsonMessage.toJSON(this.keys.pubKey.encrypt(message)));
+    console.log("Message to encrypt: ", message);
+    const encrypted: bigint = this.keys.pubKey.encrypt(message);
+    console.log("Encrypted ciphertext: ", encrypted);
+    res.status(200).json(rsa.JsonMessage.toJSON(encrypted));
   };
 
   async routes() {

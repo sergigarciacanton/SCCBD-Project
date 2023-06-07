@@ -17,6 +17,7 @@ import { EncryptDecryptComponent } from './components/encrypt-decrypt/encrypt-de
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { SignVerifyComponent } from './components/sign-verify/sign-verify.component';
 import { BlindSignatureComponent } from './components/blind-signature/blind-signature.component';
+import { PaillierComponent } from './components/paillier/paillier.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { BlindSignatureComponent } from './components/blind-signature/blind-sign
     DashboardComponent,
     SignVerifyComponent,
     BlindSignatureComponent,
+    PaillierComponent,
   ],
   imports: [
     BrowserModule,

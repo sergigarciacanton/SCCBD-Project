@@ -32,37 +32,38 @@ export class SignVerifyComponent implements OnInit {
   ngOnInit(): void {}
 
   sign() {
-    const message: string = this.signForm.get('message')?.value;
-    this._rsaService
-      .sign(rsa.JsonMessage.toJSON(bc.textToBigint(message)))
-      .subscribe(
-        (data) => {
-          //console.log(bc.bigintToBase64(rsa.JsonMessage.fromJSON(data)));
-          this.verifyForm
-            .get('ciphertext')
-            ?.setValue(atob(bc.bigintToBase64(rsa.JsonMessage.fromJSON(data))));
-          this.toastr.success('Message signed!');
-          this.signForm.reset();
-        },
-        (error) => {
-          console.log(error);
-          this.signForm.reset();
-        }
-      );
+    const message: bigint = bc.textToBigint(
+      this.signForm.get('message')?.value
+    );
+    console.log('Message to sign: ', message);
+    this._rsaService.sign(rsa.JsonMessage.toJSON(message)).subscribe(
+      (data) => {
+        const signed: bigint = rsa.JsonMessage.fromJSON(data);
+        console.log('Signed message: ', signed);
+        this.verifyForm.get('ciphertext')?.setValue(bc.bigintToBase64(signed));
+        this.toastr.success('Message signed!');
+        this.signForm.reset();
+      },
+      (error) => {
+        console.log(error);
+        this.signForm.reset();
+      }
+    );
   }
 
   verify() {
-    const ciphertext: string = btoa(this.verifyForm.get('ciphertext')?.value);
+    const ciphertext: bigint = bc.base64ToBigint(
+      this.verifyForm.get('ciphertext')?.value
+    );
+    console.log('Message to verify: ', ciphertext);
     this._rsaService.getServerKey().subscribe(
       (data) => {
-        const serverPubKey = rsa.RsaPubKey.fromJSON(data);
-        const message: bigint = serverPubKey.verify(
-          bc.base64ToBigint(ciphertext)
-        );
+        const serverPubKey: rsa.RsaPubKey = rsa.RsaPubKey.fromJSON(data);
+        const message: bigint = serverPubKey.verify(ciphertext);
+        console.log('Verified message: ', message);
         document
           .getElementById('resVerify')
           ?.setAttribute('value', bc.bigintToText(message));
-        //console.log(bc.bigintToText(message));
         this.toastr.success('Message encrypted!');
         this.verifyForm.reset();
       },

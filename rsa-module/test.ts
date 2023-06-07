@@ -7,7 +7,6 @@ async function main() {
 
   console.log("TESTING ENCRYPT / DECRYPT");
   const plaintext: string = "1234567890";
-  //const plaintext: bigint = 123456789012345678901234567890n;
   console.log(`Plaintext: ${plaintext}`);
 
   const ciphertext: bigint = keys.pubKey.encrypt(bc.textToBigint(plaintext));

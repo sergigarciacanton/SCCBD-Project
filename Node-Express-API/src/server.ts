@@ -6,6 +6,7 @@ import cors from "cors";
 
 import indexRoutes from "./routes/indexRoutes";
 import rsaRoutes from "./routes/rsaRoutes";
+import paillierRoutes from "./routes/paillierRoutes";
 
 class Server {
   public app: express.Application;
@@ -31,6 +32,7 @@ class Server {
   async routes() {
     this.app.use(indexRoutes);
     this.app.use("/api/rsa", await rsaRoutes);
+    this.app.use("/api/paillier", await paillierRoutes);
   }
 
   async start() {

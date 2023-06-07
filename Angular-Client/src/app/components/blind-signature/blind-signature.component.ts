@@ -48,22 +48,23 @@ export class BlindSignatureComponent implements OnInit {
   }
 
   blind() {
-    const message: string = this.blindForm.get('message')?.value;
+    const message: bigint = bc.textToBigint(
+      this.blindForm.get('message')?.value
+    );
+    console.log('Message to blind: ', message);
     this._rsaService.getServerKey().subscribe(
       async (data) => {
-        const serverPubKey = rsa.RsaPubKey.fromJSON(data);
-        const blindMessage = bcu.modPow(
-          bc.textToBigint(message) *
-            bcu.modPow(this.r, serverPubKey.e, serverPubKey.n),
+        const serverPubKey: rsa.RsaPubKey = rsa.RsaPubKey.fromJSON(data);
+        const blindMessage: bigint = bcu.modPow(
+          message * bcu.modPow(this.r, serverPubKey.e, serverPubKey.n),
           1,
           serverPubKey.n
         );
-        console.log(blindMessage);
+        console.log('Blind message: ', blindMessage);
         this.signForm
           .get('blind_message')
-          ?.setValue(atob(bc.bigintToBase64(blindMessage)));
-        //console.log(bc.bigintToText(bm));
-        this.toastr.success('Message blinded!');
+          ?.setValue(bc.bigintToBase64(blindMessage));
+        this.toastr.success('Message blind!');
         this.blindForm.reset();
       },
       (error) => {
@@ -74,43 +75,44 @@ export class BlindSignatureComponent implements OnInit {
   }
 
   sign() {
-    const blindMessage: string = btoa(
+    const blindMessage: bigint = bc.base64ToBigint(
       this.signForm.get('blind_message')?.value
     );
-    this._rsaService
-      .sign(rsa.JsonMessage.toJSON(bc.base64ToBigint(blindMessage)))
-      .subscribe(
-        (data) => {
-          //console.log(bc.bigintToBase64(rsa.JsonMessage.fromJSON(data)));
-          this.unblindForm
-            .get('signed_message')
-            ?.setValue(atob(bc.bigintToBase64(rsa.JsonMessage.fromJSON(data))));
-          this.toastr.success('Message signed!');
-          this.signForm.reset();
-        },
-        (error) => {
-          console.log(error);
-          this.signForm.reset();
-        }
-      );
+    console.log('Ciphertext to sign: ', blindMessage);
+    this._rsaService.sign(rsa.JsonMessage.toJSON(blindMessage)).subscribe(
+      (data) => {
+        const signed: bigint = rsa.JsonMessage.fromJSON(data);
+        console.log('Signed message: ', signed);
+        this.unblindForm
+          .get('signed_message')
+          ?.setValue(bc.bigintToBase64(signed));
+        this.toastr.success('Message signed!');
+        this.signForm.reset();
+      },
+      (error) => {
+        console.log(error);
+        this.signForm.reset();
+      }
+    );
   }
 
   unblind() {
-    const signedMessage: string = btoa(
+    const signedMessage: bigint = bc.base64ToBigint(
       this.unblindForm.get('signed_message')?.value
     );
+    console.log('Message to unblind: ', signedMessage);
     this._rsaService.getServerKey().subscribe(
       (data) => {
-        const serverPubKey = rsa.RsaPubKey.fromJSON(data);
-        const unblindMessage = bcu.modPow(
-          bc.base64ToBigint(signedMessage) * bcu.modInv(this.r, serverPubKey.n),
+        const serverPubKey: rsa.RsaPubKey = rsa.RsaPubKey.fromJSON(data);
+        const unblindMessage: bigint = bcu.modPow(
+          signedMessage * bcu.modInv(this.r, serverPubKey.n),
           1,
           serverPubKey.n
         );
-        //console.log(bc.bigintToBase64(rsa.JsonMessage.fromJSON(data)));
+        console.log('Unblinded message: ', unblindMessage);
         this.verifyForm
           .get('unblind_message')
-          ?.setValue(atob(bc.bigintToBase64(unblindMessage)));
+          ?.setValue(bc.bigintToBase64(unblindMessage));
         this.toastr.success('Message unblinded!');
         this.unblindForm.reset();
       },
@@ -122,19 +124,18 @@ export class BlindSignatureComponent implements OnInit {
   }
 
   verify() {
-    const ciphertext: string = btoa(
+    const ciphertext: bigint = bc.base64ToBigint(
       this.verifyForm.get('unblind_message')?.value
     );
+    console.log('Ciphertext to verify: ', ciphertext);
     this._rsaService.getServerKey().subscribe(
       (data) => {
-        const serverPubKey = rsa.RsaPubKey.fromJSON(data);
-        const message: bigint = serverPubKey.verify(
-          bc.base64ToBigint(ciphertext)
-        );
+        const serverPubKey: rsa.RsaPubKey = rsa.RsaPubKey.fromJSON(data);
+        const message: bigint = serverPubKey.verify(ciphertext);
+        console.log('Verified message: ', message);
         document
           .getElementById('resVerify')
           ?.setAttribute('value', bc.bigintToText(message));
-        //console.log(bc.bigintToText(message));
         this.toastr.success('Message encrypted!');
         this.verifyForm.reset();
       },

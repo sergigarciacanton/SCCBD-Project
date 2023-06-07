@@ -32,17 +32,18 @@ export class EncryptDecryptComponent implements OnInit {
   ngOnInit(): void {}
 
   encrypt() {
-    const message: string = this.encryptForm.get('message')?.value;
+    const message: bigint = bc.textToBigint(
+      this.encryptForm.get('message')?.value
+    );
+    console.log('Message to encrypt: ', message);
     this._rsaService.getServerKey().subscribe(
       (data) => {
-        const serverPubKey = rsa.RsaPubKey.fromJSON(data);
-        const ciphertext: bigint = serverPubKey.encrypt(
-          bc.textToBigint(message)
-        );
+        const serverPubKey: rsa.RsaPubKey = rsa.RsaPubKey.fromJSON(data);
+        const ciphertext: bigint = serverPubKey.encrypt(message);
+        console.log('Encrypted message: ', ciphertext);
         this.decryptForm
           .get('ciphertext')
-          ?.setValue(atob(bc.bigintToBase64(ciphertext)));
-        //console.log(bc.bigintToBase64(ciphertext));
+          ?.setValue(bc.bigintToBase64(ciphertext));
         this.toastr.success('Message encrypted!');
         this.encryptForm.reset();
       },
@@ -54,25 +55,24 @@ export class EncryptDecryptComponent implements OnInit {
   }
 
   decrypt() {
-    const ciphertext: string = btoa(this.decryptForm.get('ciphertext')?.value);
-    this._rsaService
-      .decrypt(rsa.JsonMessage.toJSON(bc.base64ToBigint(ciphertext)))
-      .subscribe(
-        (data) => {
-          //console.log(bc.bigintToText(rsa.JsonMessage.fromJSON(data)));
-          document
-            .getElementById('resDecrypt')
-            ?.setAttribute(
-              'value',
-              bc.bigintToText(rsa.JsonMessage.fromJSON(data))
-            );
-          this.toastr.success('Message decrypted!');
-          this.decryptForm.reset();
-        },
-        (error) => {
-          console.log(error);
-          this.decryptForm.reset();
-        }
-      );
+    const ciphertext: bigint = bc.base64ToBigint(
+      this.decryptForm.get('ciphertext')?.value
+    );
+    console.log('Ciphertext to decrypt: ', ciphertext);
+    this._rsaService.decrypt(rsa.JsonMessage.toJSON(ciphertext)).subscribe(
+      (data) => {
+        const decrypted: bigint = rsa.JsonMessage.fromJSON(data);
+        console.log('Decrypted message: ', decrypted);
+        document
+          .getElementById('resDecrypt')
+          ?.setAttribute('value', bc.bigintToText(decrypted));
+        this.toastr.success('Message decrypted!');
+        this.decryptForm.reset();
+      },
+      (error) => {
+        console.log(error);
+        this.decryptForm.reset();
+      }
+    );
   }
 }
