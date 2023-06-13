@@ -1,10 +1,11 @@
 import * as myModule from "./index";
 import * as bc from "bigint-conversion";
 import * as bcu from "bigint-crypto-utils";
+import * as objectSha from "object-sha";
 
 async function main() {
   const keys: myModule.KeyPair = await myModule.generateKeyPair(1024);
-
+  /* 
   console.log("TESTING ENCRYPT / DECRYPT");
   const plaintext: string = "1234567890";
   console.log(`Plaintext: ${plaintext}`);
@@ -54,7 +55,35 @@ async function main() {
   const um = bcu.modPow(sm * bcu.modInv(r, keys.pubKey.n), 1, keys.pubKey.n);
   console.log(um);
   const m2 = bcu.modPow(um, keys.pubKey.e, keys.privKey.n);
-  console.log(bc.bigintToText(m2));
+  console.log(bc.bigintToText(m2)); */
+  const jsonPubKey = keys.pubKey.toJSON();
+  console.log("JSON pubKey");
+  console.log(jsonPubKey);
+  const stringPubKey = await objectSha.digest(JSON.stringify(jsonPubKey));
+  console.log("String pubKey's hash");
+  console.log(stringPubKey);
+  const bigintPubKey = bc.textToBigint(stringPubKey);
+  // console.log("Bigint");
+  // console.log(bigintPubKey);
+  const signedPubKey = keys.privKey.sign(bigintPubKey);
+  // console.log("Signed");
+  // console.log(signedPubKey);
+  const signedBase64PubKey = myModule.JsonMessage.toJSON(signedPubKey);
+  console.log("Signed Base64 pubKey's hash");
+  console.log(signedBase64PubKey);
+  const signed2PubKey = myModule.JsonMessage.fromJSON(signedBase64PubKey);
+  /* console.log("Signed2");
+  console.log(signed2PubKey);
+  console.log(signedPubKey == signed2PubKey);
+  const verifiedPubKey = keys.pubKey.verify(signedPubKey);
+  console.log("Verified");
+  console.log(verifiedPubKey);
+  console.log(bigintPubKey == verifiedPubKey);
+  const string2PubKey = bc.bigintToText(verifiedPubKey);
+  console.log("String2");
+  console.log(string2PubKey);
+  console.log(stringPubKey == string2PubKey);
+  console.log("Base64"); */
 }
 
 main();

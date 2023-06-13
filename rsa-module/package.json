@@ -23,7 +23,8 @@
   },
   "dependencies": {
     "bigint-conversion": "^2.4.1",
-    "bigint-crypto-utils": "^3.1.8"
+    "bigint-crypto-utils": "^3.1.8",
+    "object-sha": "^2.1.1"
   },
   "exports": {
     ".": {
