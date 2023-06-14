@@ -36,6 +36,8 @@ async function getEventsByAdminName(
   });
   if (eventFound == null) {
     res.status(404).send("The event doesn't exist!");
+  } else if (eventFound.length == 0) {
+    res.status(404).send("This user is not admin of any event!");
   } else {
     res.status(200).send(eventFound);
   }
@@ -61,7 +63,6 @@ async function joinEvent(req: Request, res: Response): Promise<void> {
   try {
     const { eventName } = req.params;
     const { pubKeys } = req.body;
-    console.log(req.params);
     const event = await Event.findOne({ name: eventName });
     if (event == null) {
       res.status(404).send({ message: "Error. Event not found." });
@@ -87,13 +88,8 @@ async function leaveEvent(req: Request, res: Response): Promise<void> {
   try {
     const { eventName } = req.params;
     const { pubKey, signature } = req.body;
-    console.log(eventName);
-    console.log(pubKey);
-    console.log(signature);
     const clientPubKey = rsa.RsaPubKey.fromJSON(pubKey);
-    console.log(clientPubKey);
     const verified = clientPubKey.verify(rsa.JsonMessage.fromJSON(signature));
-    console.log(verified);
     const digest = await objectSha.digest(
       JSON.stringify(clientPubKey.toJSON())
     );
@@ -106,12 +102,20 @@ async function leaveEvent(req: Request, res: Response): Promise<void> {
       Event.findOneAndUpdate(
         { name: eventName },
         { $pull: { pubKeys: digest } },
-        function (error) {
+        { new: true },
+        function (error, affected) {
+          console.log(event);
+          console.log(affected);
           if (error) {
             console.log(error);
             res
               .status(500)
               .send({ message: "Error deleting the user to event." });
+            return;
+          } else if (event.pubKeys.length == affected!.pubKeys.length) {
+            res.status(404).send({
+              message: "User not present in event",
+            });
             return;
           } else {
             res.status(200).send({
@@ -132,13 +136,8 @@ async function leaseEvent(req: Request, res: Response): Promise<void> {
   try {
     const { eventName } = req.params;
     const { pubKey, signature, fooPubKey } = req.body;
-    console.log(eventName);
-    console.log(pubKey);
-    console.log(signature);
     const clientPubKey = rsa.RsaPubKey.fromJSON(pubKey);
-    console.log(clientPubKey);
     const verified = clientPubKey.verify(rsa.JsonMessage.fromJSON(signature));
-    console.log(verified);
     const digest = await objectSha.digest(
       JSON.stringify(clientPubKey.toJSON())
     );
@@ -151,12 +150,18 @@ async function leaseEvent(req: Request, res: Response): Promise<void> {
       Event.findOneAndUpdate(
         { name: eventName },
         { $pull: { pubKeys: digest } },
-        function (error) {
+        { new: true },
+        function (error, affected) {
           if (error) {
             console.log(error);
             res
               .status(500)
-              .send({ message: "Error deleting the user to event." });
+              .send({ message: "Error deleting user from event." });
+            return;
+          } else if (event.pubKeys.length == affected!.pubKeys.length) {
+            res.status(404).send({
+              message: "User not present in event",
+            });
             return;
           }
         }
@@ -167,9 +172,7 @@ async function leaseEvent(req: Request, res: Response): Promise<void> {
         function (error) {
           if (error) {
             console.log(error);
-            res
-              .status(500)
-              .send({ message: "Error deleting the user to event." });
+            res.status(500).send({ message: "Error adding user to event." });
             return;
           } else {
             res.status(200).send({

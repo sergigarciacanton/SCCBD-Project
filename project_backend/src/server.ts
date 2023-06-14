@@ -7,7 +7,6 @@ import mongoose from "mongoose";
 
 import indexRoutes from "./routes/indexRoutes";
 import rsaRoutes from "./routes/rsaRoutes";
-import paillierRoutes from "./routes/paillierRoutes";
 import userRoutes from "./routes/usersRoutes";
 import eventRoutes from "./routes/eventRoutes";
 
@@ -41,7 +40,6 @@ class Server {
   async routes() {
     this.app.use(indexRoutes);
     this.app.use("/api/rsa", await rsaRoutes);
-    this.app.use("/api/paillier", await paillierRoutes);
     this.app.use("/api/user", userRoutes);
     this.app.use("/api/event", eventRoutes);
   }
