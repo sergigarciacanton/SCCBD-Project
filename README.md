@@ -352,20 +352,17 @@ npm install ../rsa-module
 
 **Endpoints:**
 
-- rsaRoutes
-  - GET getAPIUsage ( / ): Returns a string with all necessary information for using the rest of endpoints of the service
-  - GET getPubKey ( /getPubKey ): Returns the server's RSA public key in base64 format
-  - POST encrypt ( /encrypt ): Returns a base64-encoded bigint containing the encrypted message given as a body parameter (NOTE: Not for actual usage, use only for testing purposes)
-  - POST decrypt ( /decrypt ): Returns a base64-encoded bigint containing the decrypted message given as a body parameter
-  - POST sign ( /sign ): Returns a base64-encoded bigint containing the signed message given as a body parameter
-  - POST verify ( /verify ): Returns a base64-encoded bigint containing the verified message given as a body parameter (NOTE: Not for actual usage, use only for testing purposes)
-- usersRoutes
+- auth ( /auth ):
+  - POST signUp ( /signUp ): Registers a new user to the system given its name (name), password (password) and type of user (type, regular user or event organizer). Passwords are saved in the database using a hash function so that they can not be read. If result is successful, this endpoint returns a JWT token that user must use for any other request out of this service's endpoints
+  - POST signIn ( /signIn ): Initializes a new session for a registered user, given its name (name) and password (password). If result is successful, this endpoint returns a JWT token that user must use for any other request out of this service's endpoints
+  - POST verifyToken ( /verifyToken ): Given a token (token), tells the server to verify whether it is valid or not. (NOTE: Not for actual usage, use only for testing purposes)
+- usersRoutes ( /user ):
   - GET getUsers ( / ): Returns a list of all users registered in the database
   - GET getUserByName ( /:nameUser ): Returns the information of a user given its name in the path
   - POST addUser ( / ): Adds a new user to the database given its name (name), password (password) and type (type, regular user or event organizer) (NOTE: Not for actual usage, use only for testing purposes)
   - PUT updateUser ( /:nameUser ): Updates a user's information given in the body of the request
   - DELETE deleteUser ( /:nameUser ): Deletes a user given its name
-- eventRoutes
+- eventRoutes ( /event ):
   - GET getEvents ( / ): Returns a list of all events registered in the database
   - GET getEventByName ( /:name ): Returns the information of an event given its name in the path
   - GET getEventsByAdminName ( /admin/:name ): Returns a list of all events whose admin has the name given in the path
@@ -405,3 +402,11 @@ Follow these steps in order to set up the client:
 
 - Import all necessary dependencies by typing the console command `flutter pub get`
 - Start the Angular client by typing the console command `flutter run`. The console will prompt all available options for launching the app, after choosing, the app will start by itself without need to open any browser or extra application
+
+## Insomnia JSON file
+
+This file has been exported from Insomnia and contains a collection of requests for testing all node servers in this repo.
+
+It can be imported easily by going to Application -> Preferences option on the top bar of the window, changing to Data tab, clicking on Import data -> From file, and selecting the desired JSON file
+
+NOTE: For using requests that require authentication (JWT) a token is necessary. So first of all, send an auth request and copy the returned token in the Headers -> authentication field of any other request which needs authentication

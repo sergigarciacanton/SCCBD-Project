@@ -4,11 +4,14 @@ import helmet from "helmet";
 import compression from "compression";
 import cors from "cors";
 import mongoose from "mongoose";
+import dotenv from "dotenv";
 
 import indexRoutes from "./routes/indexRoutes";
+import authRoutes from "./routes/auth";
 import rsaRoutes from "./routes/rsaRoutes";
 import userRoutes from "./routes/usersRoutes";
 import eventRoutes from "./routes/eventRoutes";
+import { VerifyToken, VerifyAdminToken } from "./middlewares/verifyToken.js";
 
 class Server {
   public app: express.Application;
@@ -21,12 +24,11 @@ class Server {
   config() {
     //MongoDB
     const MONGO_URI = "mongodb://localhost/sccbd";
-    mongoose
-      .connect(MONGO_URI || process.env.MONGODB_URL)
-      .then((db) => console.log("DB is connected"));
+    mongoose.connect(MONGO_URI).then((db) => console.log("DB is connected"));
 
     //Settings
-    this.app.set("port", process.env.PORT || 3000);
+    dotenv.config({ path: ".env.secret" });
+    this.app.set("port", 3000);
 
     //Middlewares
     this.app.use(morgan("dev")); //Allows to see by console the petitions that eventually arrive.
@@ -39,9 +41,10 @@ class Server {
 
   async routes() {
     this.app.use(indexRoutes);
-    this.app.use("/api/rsa", await rsaRoutes);
-    this.app.use("/api/user", userRoutes);
-    this.app.use("/api/event", eventRoutes);
+    this.app.use("/api/auth", authRoutes);
+    this.app.use("/api/rsa", VerifyToken, await rsaRoutes);
+    this.app.use("/api/user", VerifyToken, userRoutes);
+    this.app.use("/api/event", VerifyToken, eventRoutes);
   }
 
   async start() {
