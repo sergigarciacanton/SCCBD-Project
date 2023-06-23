@@ -7,22 +7,41 @@ import * as bc from "bigint-conversion";
 import * as objectSha from "object-sha";
 
 async function getEvents(req: Request, res: Response): Promise<void> {
-  const allEvents = await Event.find();
+  const allEvents = await Event.find().populate("admin", "name");
   if (allEvents.length == 0) {
     res.status(404).send("There are no events yet!");
   } else {
-    res.status(200).send(allEvents);
+    let output = [{}];
+    allEvents.forEach((element) => {
+      const object = {
+        _id: element._id,
+        name: element.name,
+        date: element.date,
+        admin: element.admin,
+        numSpots: element.numSpots,
+        availableSpots: element.numSpots - element.pubKeys.length,
+      };
+      output.push(object);
+    });
+    res.status(200).send(output.splice(1, output.length - 1));
   }
 }
 
 async function getEventByName(req: Request, res: Response): Promise<void> {
   const eventFound = await Event.findOne({
     name: req.params.name,
-  });
+  }).populate("admin", "name");
   if (eventFound == null) {
     res.status(404).send("The event doesn't exist!");
   } else {
-    res.status(200).send(eventFound);
+    res.status(200).send({
+      _id: eventFound._id,
+      name: eventFound.name,
+      date: eventFound.date,
+      admin: eventFound.admin,
+      numSpots: eventFound.numSpots,
+      availableSpots: eventFound.numSpots - eventFound.pubKeys.length,
+    });
   }
 }
 
@@ -33,13 +52,25 @@ async function getEventsByAdminName(
   const user = await User.findOne({ name: req.params.name });
   const eventFound = await Event.find({
     admin: user,
-  });
+  }).populate("admin", "name");
   if (eventFound == null) {
     res.status(404).send("The event doesn't exist!");
   } else if (eventFound.length == 0) {
     res.status(404).send("This user is not admin of any event!");
   } else {
-    res.status(200).send(eventFound);
+    let output = [{}];
+    eventFound.forEach((element) => {
+      const object = {
+        _id: element._id,
+        name: element.name,
+        date: element.date,
+        admin: element.admin,
+        numSpots: element.numSpots,
+        availableSpots: element.numSpots - element.pubKeys.length,
+      };
+      output.push(object);
+    });
+    res.status(200).send(output.splice(1, output.length - 1));
   }
 }
 

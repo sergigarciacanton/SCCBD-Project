@@ -7,7 +7,16 @@ async function getUsers(req: Request, res: Response): Promise<void> {
   if (allUsers.length == 0) {
     res.status(404).send("There are no users yet!");
   } else {
-    res.status(200).send(allUsers);
+    let output = [{}];
+    allUsers.forEach((element) => {
+      const object = {
+        _id: element._id,
+        name: element.name,
+        type: element.type,
+      };
+      output.push(object);
+    });
+    res.status(200).send(output.splice(1, output.length - 1));
   }
 }
 
@@ -16,7 +25,11 @@ async function getUserByName(req: Request, res: Response): Promise<void> {
   if (userFound == null) {
     res.status(404).send("The user doesn't exist!");
   } else {
-    res.status(200).send(userFound);
+    res.status(200).send({
+      _id: userFound._id,
+      name: userFound.name,
+      type: userFound.type,
+    });
   }
 }
 
