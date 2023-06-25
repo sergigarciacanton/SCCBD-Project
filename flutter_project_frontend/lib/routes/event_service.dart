@@ -12,7 +12,7 @@ import '../models/newevent.dart';
 class EventService {
   static Future<List<Event>> getEvents() async {
     Uri url = Uri.parse(const String.fromEnvironment('API_URL',
-            defaultValue: 'http://localhost:3000') +
+            defaultValue: 'http://192.168.1.39:3000') +
         '/api/event/');
 
     final response = await http.get(
@@ -25,7 +25,7 @@ class EventService {
 
   static Future<Event> getEvent(String name) async {
     String baseUrl = const String.fromEnvironment('API_URL',
-            defaultValue: 'http://localhost:3000') +
+            defaultValue: 'http://192.168.1.39:3000') +
         '/api/event/$name/';
     Uri url = Uri.parse(baseUrl);
 
@@ -39,7 +39,7 @@ class EventService {
 
   static Future<bool> joinEvent(String eventName, List<String> pubKeys) async {
     Uri url = Uri.parse(const String.fromEnvironment('API_URL',
-            defaultValue: 'http://localhost:3000') +
+            defaultValue: 'http://192.168.1.39:3000') +
         '/api/event/join/$eventName');
     final response = await http.put(url,
         headers: {
@@ -56,7 +56,7 @@ class EventService {
   static Future<bool> leaveEvent(
       String eventName, RsaJsonPubKey pubKey, String signature) async {
     Uri url = Uri.parse(const String.fromEnvironment('API_URL',
-            defaultValue: 'http://localhost:3000') +
+            defaultValue: 'http://192.168.1.39:3000') +
         '/api/event/leave/$eventName');
 
     final response = await http.put(url,
@@ -67,17 +67,34 @@ class EventService {
         body: json.encode(LeaveEvent.toJson(
             LeaveEvent(pubKey: pubKey, signature: signature))));
     if (response.statusCode == 200) {
-      print('OK');
       return true;
     }
-    print('KO');
+    return false;
+  }
+
+  static Future<bool> checkQrCode(
+      String eventName, RsaJsonPubKey pubKey, String signature) async {
+    Uri url = Uri.parse(const String.fromEnvironment('API_URL',
+            defaultValue: 'http://192.168.1.39:3000') +
+        '/api/event/qr/$eventName');
+
+    final response = await http.put(url,
+        headers: {
+          'authorization': LocalStorage('SCCBD').getItem('token'),
+          "Content-Type": "application/json"
+        },
+        body: json.encode(LeaveEvent.toJson(
+            LeaveEvent(pubKey: pubKey, signature: signature))));
+    if (response.statusCode == 200) {
+      return true;
+    }
     return false;
   }
 
   static Future<String> newEvent(NewEventModel values) async {
     String userId = LocalStorage('SCCBD').getItem('userId');
     Uri url = Uri.parse(const String.fromEnvironment('API_URL',
-            defaultValue: 'http://localhost:3000') +
+            defaultValue: 'http://192.168.1.39:3000') +
         '/api/event/$userId');
 
     var response = await http.post(url,
@@ -95,7 +112,7 @@ class EventService {
 
   static Future<String> editEvent(String id, EditEventModel event) async {
     String baseUrl = const String.fromEnvironment('API_URL',
-            defaultValue: 'http://localhost:3000') +
+            defaultValue: 'http://192.168.1.39:3000') +
         '/api/event/$id/';
     Uri url = Uri.parse(baseUrl);
 

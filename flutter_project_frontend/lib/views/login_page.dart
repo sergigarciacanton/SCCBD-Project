@@ -54,9 +54,9 @@ class _LoginPageState extends State<LoginPage> {
                         darkTheme
                             ? Image.asset("public/logowhite.png")
                             : Image.asset("public/logo.png"),
-                        Text(
+                        const Text(
                           'Sign in',
-                          style: const TextStyle(
+                          style: TextStyle(
                               fontSize: 50, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 30),
@@ -108,9 +108,9 @@ class _LoginPageState extends State<LoginPage> {
                               minimumSize: MaterialStateProperty.all(
                                   Size(MediaQuery.of(context).size.width, 60)),
                             ),
-                            child: Text(
+                            child: const Text(
                               'Submit',
-                              style: const TextStyle(
+                              style: TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.bold),
                             ),
                             onPressed: () async {
@@ -148,9 +148,9 @@ class _LoginPageState extends State<LoginPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
+                            const Text(
                               'Still without account?',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 15,
                               ),
                             ),

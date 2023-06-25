@@ -5,7 +5,6 @@ import User from "../models/User";
 import * as rsa from "rsa-module";
 import * as bc from "bigint-conversion";
 import * as objectSha from "object-sha";
-import { TextEncoder } from "util";
 
 async function getEvents(req: Request, res: Response): Promise<void> {
   const allEvents = await Event.find().populate("admin", "name");
@@ -235,6 +234,37 @@ async function updateEvent(req: Request, res: Response): Promise<void> {
   }
 }
 
+async function checkQrCode(req: Request, res: Response): Promise<void> {
+  const { nameEvent } = req.params;
+  const { pubKey, signature } = req.body;
+  const clientPubKey = rsa.RsaPubKey.fromJSON(pubKey);
+  const verified = clientPubKey.verify(rsa.JsonMessage.fromJSON(signature));
+  const digest = await objectSha.digest(JSON.stringify(clientPubKey.toJSON()));
+  //if (bc.bigintToText(verified) == digest) {
+  const event = await Event.findOne({ name: nameEvent });
+  if (event == null) {
+    res.status(404).send({ message: "Event not found" });
+    return;
+  } else {
+    var i = 0;
+    while (i < event.pubKeys.length) {
+      if (event.pubKeys[i] == bc.bigintToText(verified)) {
+        break;
+      } else {
+        i++;
+      }
+    }
+    if (i < event.pubKeys.length) {
+      res.status(200).send({ message: "Access granted!" });
+    } else {
+      res.status(404).send({ message: "QR code not valid" });
+    }
+  }
+  /* } else {
+    res.status(403).send({ message: `Bad auth` });
+  } */
+}
+
 async function deleteEvent(req: Request, res: Response): Promise<void> {
   const eventToDelete = await Event.findOneAndDelete(
     { name: req.params.nameEvent },
@@ -256,6 +286,7 @@ router.post("/", addEvent);
 router.put("/join/:eventName", joinEvent);
 router.put("/leave/:eventName", leaveEvent);
 router.put("/lease/:eventName", leaseEvent);
+router.put("/qr/:nameEvent", checkQrCode);
 router.put("/:nameEvent", updateEvent);
 router.delete("/:nameEvent", deleteEvent);
 

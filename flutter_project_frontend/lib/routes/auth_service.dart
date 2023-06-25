@@ -59,7 +59,7 @@ class AuthService {
 
   static String checkPlatform() {
     return const String.fromEnvironment('API_URL',
-            defaultValue: 'http://localhost:3000') +
+            defaultValue: 'http://192.168.1.39:3000') +
         '/api/auth/';
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter_project_frontend/views/home.dart';
 import 'package:flutter_project_frontend/views/home_scaffold.dart';
 //import 'package:flutter_project_frontend/views/settings_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_project_frontend/views/qr_scanner.dart';
 import 'package:localstorage/localstorage.dart';
 
 class MobileLayout extends StatefulWidget {
@@ -12,7 +13,7 @@ class MobileLayout extends StatefulWidget {
 }
 
 class _MobileLayoutState extends State<MobileLayout> {
-  Widget mainComponent = Home();
+  Widget mainComponent = const Home();
   setMainComponent(Widget component) {
     Navigator.push(
       context,
@@ -28,7 +29,7 @@ class _MobileLayoutState extends State<MobileLayout> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => HomeScaffold()));
+                                  builder: (context) => const HomeScaffold()));
                         })
                   ],
                   backgroundColor:
@@ -65,8 +66,8 @@ class _MobileLayoutState extends State<MobileLayout> {
 
   @override
   void didChangeDependencies() {
-    appBarTitle = "home";
-    views = ["home", "clubTitle", "eventTitle", "chatTitle", "profile"];
+    appBarTitle = "Home";
+    views = ["Home", "QR Codes reader"];
     super.didChangeDependencies();
   }
 
@@ -78,17 +79,10 @@ class _MobileLayoutState extends State<MobileLayout> {
           backgroundColor: Theme.of(context).navigationBarTheme.backgroundColor,
           automaticallyImplyLeading: false),
       bottomNavigationBar: BottomNavigationBar(
-          items: <BottomNavigationBarItem>[
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
             BottomNavigationBarItem(
-                icon: const Icon(Icons.home), label: 'home'),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.group), label: 'clubTitle'),
-            BottomNavigationBarItem(
-                icon: const Icon(Icons.event), label: 'eventTitle'),
-            BottomNavigationBarItem(
-                icon: const Icon(Icons.chat), label: 'chatTitle'),
-            BottomNavigationBarItem(
-                icon: const Icon(Icons.face), label: 'profile')
+                icon: Icon(Icons.qr_code_2), label: 'QR Codes reader')
           ],
           currentIndex: _selectedIndex,
           selectedItemColor: Theme.of(context).backgroundColor,
@@ -98,10 +92,7 @@ class _MobileLayoutState extends State<MobileLayout> {
           onTap: onTapped),
       body: PageView(controller: pageController, children: [
         Home(setMainComponent: setMainComponent),
-        //ClubList(setMainComponent: setMainComponent),
-        //EventList(setMainComponent: setMainComponent),
-        //ChatList(setMainComponent: setMainComponent),
-        //SettingPage(),
+        QRViewExample(setMainComponent: setMainComponent),
         mainComponent,
       ]),
     );

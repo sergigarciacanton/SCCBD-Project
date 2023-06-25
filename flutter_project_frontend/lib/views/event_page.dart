@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter_project_frontend/models/event.dart';
+import 'package:flutter_project_frontend/models/qrCodeData.dart';
 import 'package:flutter_project_frontend/routes/event_service.dart';
+import 'package:flutter_project_frontend/views/qr_code.dart';
 import 'package:flutter_project_frontend/views/widgets/new_event.dart';
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
@@ -21,10 +23,12 @@ class EventPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<EventPage> createState() => _EventPageState();
+  State<EventPage> createState() => _EventPageState(setMainComponent);
 }
 
 class _EventPageState extends State<EventPage> {
+  Function? setMainComponent;
+  _EventPageState(this.setMainComponent);
   late String userName;
   var storage;
 
@@ -100,16 +104,144 @@ class _EventPageState extends State<EventPage> {
                         ), */
                         SliverToBoxAdapter(
                             child: SafeArea(
-                          child: SingleChildScrollView(
-                              child: ConstrainedBox(
-                                  constraints: const BoxConstraints(
-                                    minHeight: 30,
-                                  ),
-                                  child: IntrinsicHeight(
-                                      child: Container(
-                                          child: _Event(context, snapshot,
-                                              screenSize))))),
-                        )),
+                                child: SingleChildScrollView(
+                                    child: ConstrainedBox(
+                                        constraints: const BoxConstraints(
+                                          minHeight: 30,
+                                        ),
+                                        child: IntrinsicHeight(
+                                          child: Container(
+                                              child: Column(
+                                            children: [
+                                              _Event(context, snapshot,
+                                                  screenSize),
+                                              (storage.getItem(
+                                                          eventName + '_pub') !=
+                                                      null)
+                                                  ? Container(
+                                                      constraints:
+                                                          const BoxConstraints(
+                                                              maxWidth: 300),
+                                                      child: ElevatedButton(
+                                                          style: ButtonStyle(
+                                                            backgroundColor:
+                                                                MaterialStateProperty.all<
+                                                                    Color>(Theme.of(
+                                                                        context)
+                                                                    .backgroundColor),
+                                                            minimumSize: MaterialStateProperty
+                                                                .all(Size(
+                                                                    MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .width,
+                                                                    60)),
+                                                          ),
+                                                          child: const Text(
+                                                            'Generate QR Code',
+                                                            style: TextStyle(
+                                                                fontSize: 20,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                          ),
+                                                          onPressed: () async {
+                                                            String
+                                                                storedPubKeyJson =
+                                                                storage.getItem(
+                                                                    eventName +
+                                                                        '_pub');
+                                                            String
+                                                                storedPrivKeyJson =
+                                                                storage.getItem(
+                                                                    eventName +
+                                                                        '_priv');
+
+                                                            // Convert the JSON string back to a map of BigInts
+                                                            Map<String, BigInt>
+                                                                storedPubKeyMap =
+                                                                (jsonDecode(storedPubKeyJson)
+                                                                        as Map<
+                                                                            String,
+                                                                            dynamic>)
+                                                                    .map((k,
+                                                                            v) =>
+                                                                        MapEntry(
+                                                                            k,
+                                                                            BigInt.parse(v)));
+                                                            Map<String, BigInt>
+                                                                storedPrivKeyMap =
+                                                                (jsonDecode(storedPrivKeyJson)
+                                                                        as Map<
+                                                                            String,
+                                                                            dynamic>)
+                                                                    .map((k,
+                                                                            v) =>
+                                                                        MapEntry(
+                                                                            k,
+                                                                            BigInt.parse(v)));
+
+                                                            String pubKeyJson =
+                                                                jsonEncode(
+                                                                        storedPubKeyJson)
+                                                                    .replaceAll(
+                                                                        "\\",
+                                                                        "");
+
+                                                            BigInt
+                                                                storedPubKeyE =
+                                                                storedPubKeyMap[
+                                                                    'e']!;
+                                                            BigInt
+                                                                storedPubKeyN =
+                                                                storedPubKeyMap[
+                                                                    'n']!;
+                                                            BigInt
+                                                                storedPrivKeyD =
+                                                                storedPrivKeyMap[
+                                                                    'd']!;
+
+                                                            KeyPair
+                                                                storedKeyPair;
+                                                            // Convert the map of BigInts back to a KeyPair
+                                                            storedKeyPair = KeyPair(
+                                                                RsaPubKey(
+                                                                    storedPubKeyE,
+                                                                    storedPubKeyN),
+                                                                RsaPrivKey(
+                                                                    storedPrivKeyD,
+                                                                    storedPubKeyN));
+                                                            var encoded =
+                                                                utf8.encode(
+                                                                    pubKeyJson);
+                                                            List<int> copy =
+                                                                List.from(
+                                                                    encoded);
+                                                            copy.removeAt(0);
+                                                            copy.removeLast();
+
+                                                            var qrData = QrCodeData(
+                                                                    nameEvent:
+                                                                        eventName,
+                                                                    pubKey: storedKeyPair
+                                                                        .pubKey
+                                                                        .toJSON(),
+                                                                    signature: bigintToBase64(storedKeyPair
+                                                                        .privKey
+                                                                        .sign(textToBigint(sha256
+                                                                            .convert(copy)
+                                                                            .toString()))))
+                                                                .toString();
+
+                                                            setMainComponent!(MyQrCode(
+                                                                setMainComponent:
+                                                                    setMainComponent,
+                                                                data: qrData));
+                                                          }))
+                                                  : Container(),
+                                            ],
+                                          )),
+                                        )))))
                       ],
                     ))
                   ],
@@ -147,6 +279,7 @@ class _EventPageState extends State<EventPage> {
         _buildAvailableSpots(context, snapshot),
         _buildSeparator(screenSize),
         _buildButtons(snapshot),
+        _buildSeparator(screenSize),
       ],
     );
   }
@@ -196,10 +329,7 @@ class _EventPageState extends State<EventPage> {
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30.0),
         child: Row(
           children: <Widget>[
-            (snapshot.data!.admin.name != userName)
-                ? const SizedBox(width: 60.0)
-                : Container(),
-            (snapshot.data!.admin.name != userName)
+            (storage.getItem(eventName + '_pub') != null)
                 ? Container(
                     child: ElevatedButton(
                         style: ButtonStyle(
@@ -245,8 +375,10 @@ class _EventPageState extends State<EventPage> {
                           List<int> copy = List.from(encoded);
                           copy.removeAt(0);
                           copy.removeLast();
-                          print(pubKeyJson.toString());
-                          print(copy);
+
+                          storage.remove(eventName + '_pub');
+                          storage.remove(eventName + '_pub');
+
                           leaveEvent(
                               storedKeyPair.pubKey.toJSON(),
                               bigintToBase64(storedKeyPair.privKey.sign(
@@ -254,49 +386,42 @@ class _EventPageState extends State<EventPage> {
                                       sha256.convert(copy).toString()))));
                         }),
                     constraints: const BoxConstraints(maxWidth: 200))
-                : Container(),
+                : Container(
+                    child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              Theme.of(context).backgroundColor),
+                          minimumSize: MaterialStateProperty.all(
+                              Size(MediaQuery.of(context).size.width, 60)),
+                        ),
+                        child: const Text(
+                          'Join',
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        onPressed: () async {
+                          KeyPair keyPair = generateKeyPair(1024);
+                          Map<String, String> pubKeyMap = {
+                            'e': keyPair.pubKey.e.toString(),
+                            'n': keyPair.pubKey.n.toString()
+                          };
+                          Map<String, String> privKeyMap = {
+                            'd': keyPair.privKey.d.toString(),
+                            'n': keyPair.privKey.n.toString()
+                          };
+                          storage.setItem(
+                              eventName + '_pub', jsonEncode(pubKeyMap));
+                          storage.setItem(
+                              eventName + '_priv', jsonEncode(privKeyMap));
+                          String pubKeyJson = jsonEncode(pubKeyMap);
+                          joinEvent([
+                            sha256.convert(utf8.encode(pubKeyJson)).toString()
+                          ]);
+                        }),
+                    constraints: const BoxConstraints(maxWidth: 200))
           ],
         ),
       ),
-      Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-        child: Row(
-          children: <Widget>[
-            Container(
-                child: ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(
-                          Theme.of(context).backgroundColor),
-                      minimumSize: MaterialStateProperty.all(
-                          Size(MediaQuery.of(context).size.width, 60)),
-                    ),
-                    child: const Text(
-                      'Join',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                    onPressed: () async {
-                      KeyPair keyPair = generateKeyPair(1024);
-                      Map<String, String> pubKeyMap = {
-                        'e': keyPair.pubKey.e.toString(),
-                        'n': keyPair.pubKey.n.toString()
-                      };
-                      Map<String, String> privKeyMap = {
-                        'd': keyPair.privKey.d.toString(),
-                        'n': keyPair.privKey.n.toString()
-                      };
-                      storage.setItem(
-                          eventName + '_pub', jsonEncode(pubKeyMap));
-                      storage.setItem(
-                          eventName + '_priv', jsonEncode(privKeyMap));
-                      String pubKeyJson = jsonEncode(pubKeyMap);
-                      joinEvent(
-                          [sha256.convert(utf8.encode(pubKeyJson)).toString()]);
-                    }),
-                constraints: const BoxConstraints(maxWidth: 200))
-          ],
-        ),
-      )
     ]);
   }
 }

@@ -7,7 +7,6 @@ class LeaveEvent {
   LeaveEvent({required this.pubKey, required this.signature});
 
   static Map<String, dynamic> toJson(LeaveEvent values) {
-    print(values.pubKey);
     return {
       'pubKey': {'e': values.pubKey.e, 'n': values.pubKey.n},
       'signature': {'data': values.signature}
