@@ -370,6 +370,7 @@ npm install ../rsa-module
   - PUT joinEvent ( /join/:eventName ): Adds a user to an event, meaning that it has reserved a ticket for accessing to it. User must send one (or many in case of inviting other users) SHA digest of its public key (pubKeys) and, inside the path, the name of the event to join
   - PUT leaveEvent ( /leave/:eventName ): Deletes a user from an event, meaning that it has no interest any more in joining it and that its reserved ticket can be used by any other user. User must send its public key in base64 format (pubKey) and its signed digest (signature, in order to authenticate), plus the name of the event to leave as a path parameter
   - PUT leaseEvent ( /lease/:eventName ): Deletes a user from an event and adds an other in its place. User must send all data needed for joining and leaving an event
+  - PUT checkQrCode ( /qr/:eventName ): Checks whether the information gathered via a QR code is valid or not, that means, whether user's access to the event is granted or not. User must send its public key in Base64 format (pubKey) and its signed digest (signature, in order to authenticate), plus the name of the event to check as a path parameter
   - PUT updateEvent ( /:nameEvent ): Updates the information of an existing event without commiting changes on its joined public keys
   - DELETE deleteEvent ( /:nameEvent ): Deletes an event given its name
 
