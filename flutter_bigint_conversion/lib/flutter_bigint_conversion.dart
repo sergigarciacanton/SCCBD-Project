@@ -45,18 +45,23 @@ String bufToText(List<String> buf) {
 
 String bufToHex(List<String> buf) {
   var hex = '';
-  for (var item in buf) {
-    hex = hex + item;
+  for (var i = 0; i < buf.length; i++) {
+    hex = hex + buf[i];
   }
   return hex;
 }
 
 List<String> hexToBuf(String hex) {
+  hex = parseHex(hex);
+  hex = parseHex(hex, prefix0x: false, byteLength: (hex.length / 2).ceil());
   var buf = <String>[];
   int i = 0;
   while (i < hex.length - 1) {
     buf.add(hex[i] + hex[i + 1]);
     i += 2;
+  }
+  if (i == hex.length - 1) {
+    buf.add(hex[i]);
   }
   return buf;
 }

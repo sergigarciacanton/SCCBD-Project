@@ -33,9 +33,9 @@ class _SettingPageState extends State<SettingPage> {
 
   var storage;
   Future<User> fetchUser() async {
-    storage = LocalStorage('BookHub');
+    storage = LocalStorage('SCCBD');
     await storage.ready;
-    username = LocalStorage('BookHub').getItem('userName');
+    username = LocalStorage('SCCBD').getItem('userName');
     return UserService.getUserByUserName(username);
   }
 
@@ -80,7 +80,7 @@ class _SettingPageState extends State<SettingPage> {
       subtitle: '',
       leading: const IconWidget(icon: Icons.logout, color: Colors.blueAccent),
       onTap: () => {
-            LocalStorage('BookHub').deleteItem('token'),
+            LocalStorage('SCCBD').deleteItem('token'),
             Navigator.pop(context),
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const LoginPage()))
@@ -121,8 +121,7 @@ class _SettingPageState extends State<SettingPage> {
                                   if (controllerCheck.text ==
                                       controllerNew.text) {
                                     UserService.changePassword(
-                                        LocalStorage('BookHub')
-                                            .getItem('userId'),
+                                        LocalStorage('SCCBD').getItem('userId'),
                                         controllerNew.text,
                                         controllerOld.text);
                                     Navigator.of(context).pop();
@@ -163,8 +162,8 @@ class _SettingPageState extends State<SettingPage> {
       leading: const IconWidget(icon: Icons.delete, color: Colors.pink),
       onTap: () async => {
             await UserService.deleteAccount(
-                LocalStorage('BookHub').getItem('userId') as String),
-            LocalStorage('BookHub').deleteItem('token'),
+                LocalStorage('SCCBD').getItem('userId') as String),
+            LocalStorage('SCCBD').deleteItem('token'),
             Navigator.pop(context),
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const LoginPage()))

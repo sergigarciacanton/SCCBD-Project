@@ -1,9 +1,12 @@
 import 'dart:convert';
 import 'package:flutter_project_frontend/models/editevent.dart';
 import 'package:flutter_project_frontend/models/event.dart';
+import 'package:flutter_project_frontend/models/joinEvent.dart';
+import 'package:flutter_rsa_module/flutter_rsa_module.dart';
 import 'package:http/http.dart' as http;
 import 'package:localstorage/localstorage.dart';
 
+import '../models/leaveEvent.dart';
 import '../models/newevent.dart';
 
 class EventService {
@@ -14,7 +17,7 @@ class EventService {
 
     final response = await http.get(
       url,
-      headers: {'authorization': LocalStorage('BookHub').getItem('token')},
+      headers: {'authorization': LocalStorage('SCCBD').getItem('token')},
     );
     List data = jsonDecode(response.body);
     return Event.eventsFromSnapshot(data);
@@ -28,55 +31,58 @@ class EventService {
 
     final response = await http.get(
       url,
-      headers: {'authorization': LocalStorage('BookHub').getItem('token')},
+      headers: {'authorization': LocalStorage('SCCBD').getItem('token')},
     );
     Object data = jsonDecode(response.body);
     return Event.fromJson(data);
   }
 
-  static Future<bool> joinEvent(String eventName) async {
+  static Future<bool> joinEvent(String eventName, List<String> pubKeys) async {
     Uri url = Uri.parse(const String.fromEnvironment('API_URL',
             defaultValue: 'http://localhost:3000') +
         '/api/event/join/$eventName');
-
     final response = await http.put(url,
         headers: {
-          'authorization': LocalStorage('BookHub').getItem('token'),
+          'authorization': LocalStorage('SCCBD').getItem('token'),
           "Content-Type": "application/json"
         },
-        body: json.encode(''));
+        body: json.encode(JoinEvent.toJson(JoinEvent(pubKeys: pubKeys))));
     if (response.statusCode == 200) {
       return true;
     }
     return false;
   }
 
-  static Future<bool> leaveEvent(String eventName) async {
+  static Future<bool> leaveEvent(
+      String eventName, RsaJsonPubKey pubKey, String signature) async {
     Uri url = Uri.parse(const String.fromEnvironment('API_URL',
             defaultValue: 'http://localhost:3000') +
         '/api/event/leave/$eventName');
 
     final response = await http.put(url,
         headers: {
-          'authorization': LocalStorage('BookHub').getItem('token'),
+          'authorization': LocalStorage('SCCBD').getItem('token'),
           "Content-Type": "application/json"
         },
-        body: json.encode(''));
+        body: json.encode(LeaveEvent.toJson(
+            LeaveEvent(pubKey: pubKey, signature: signature))));
     if (response.statusCode == 200) {
+      print('OK');
       return true;
     }
+    print('KO');
     return false;
   }
 
   static Future<String> newEvent(NewEventModel values) async {
-    String userId = LocalStorage('BookHub').getItem('userId');
+    String userId = LocalStorage('SCCBD').getItem('userId');
     Uri url = Uri.parse(const String.fromEnvironment('API_URL',
             defaultValue: 'http://localhost:3000') +
         '/api/event/$userId');
 
     var response = await http.post(url,
         headers: {
-          "Authorization": LocalStorage('BookHub').getItem('token'),
+          "Authorization": LocalStorage('SCCBD').getItem('token'),
           "Content-Type": "application/json"
         },
         body: json.encode(NewEventModel.toJson(values)));
@@ -96,7 +102,7 @@ class EventService {
     final response = await http.put(
       url,
       headers: {
-        'authorization': LocalStorage('BookHub').getItem('token'),
+        'authorization': LocalStorage('SCCBD').getItem('token'),
         "Content-Type": "application/json"
       },
       body: json.encode(EditEventModel.toJson(event)),

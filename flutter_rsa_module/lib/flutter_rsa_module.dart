@@ -43,14 +43,14 @@ class RsaPrivKey {
     return m.modPow(d, n);
   }
 
-  RsaJsonPubKey toJSON() {
-    return RsaJsonPubKey(bc.bigintToBase64(d), bc.bigintToBase64(n));
+  RsaJsonPrivKey toJSON() {
+    return RsaJsonPrivKey(bc.bigintToBase64(d), bc.bigintToBase64(n));
   }
 
-  static RsaPubKey fromJSON(RsaJsonPubKey rsaJsonPubKey) {
-    var e = bc.base64ToBigint(rsaJsonPubKey.e);
+  static RsaPrivKey fromJSON(RsaJsonPrivKey rsaJsonPubKey) {
+    var d = bc.base64ToBigint(rsaJsonPubKey.d);
     var n = bc.base64ToBigint(rsaJsonPubKey.n);
-    return RsaPubKey(e, n);
+    return RsaPrivKey(d, n);
   }
 }
 

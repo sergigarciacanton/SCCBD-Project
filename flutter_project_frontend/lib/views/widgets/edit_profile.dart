@@ -35,10 +35,10 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   Future<User> fetchUser() async {
-    storage = LocalStorage('BookHub');
+    storage = LocalStorage('SCCBD');
     await storage.ready;
 
-    userName = LocalStorage('BookHub').getItem('userName');
+    userName = LocalStorage('SCCBD').getItem('userName');
 
     return UserService.getUserByUserName(userName);
   }

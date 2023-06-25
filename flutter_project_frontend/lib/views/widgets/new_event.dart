@@ -46,10 +46,10 @@ class _NewEventState extends State<NewEvent> {
   var storage;
 
   Future<User> fetchUser() async {
-    storage = LocalStorage('BookHub');
+    storage = LocalStorage('SCCBD');
     await storage.ready;
 
-    idController = LocalStorage('BookHub').getItem('userName');
+    idController = LocalStorage('SCCBD').getItem('userName');
     return UserService.getUserByUserName(idController);
   }
 

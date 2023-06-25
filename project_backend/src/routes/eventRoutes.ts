@@ -5,6 +5,7 @@ import User from "../models/User";
 import * as rsa from "rsa-module";
 import * as bc from "bigint-conversion";
 import * as objectSha from "object-sha";
+import { TextEncoder } from "util";
 
 async function getEvents(req: Request, res: Response): Promise<void> {
   const allEvents = await Event.find().populate("admin", "name");
@@ -122,42 +123,44 @@ async function leaveEvent(req: Request, res: Response): Promise<void> {
     const clientPubKey = rsa.RsaPubKey.fromJSON(pubKey);
     const verified = clientPubKey.verify(rsa.JsonMessage.fromJSON(signature));
     const digest = await objectSha.digest(
-      JSON.stringify(clientPubKey.toJSON())
+      bc.textToBuf(JSON.stringify(clientPubKey.toJSON())),
+      "SHA-256"
     );
-    if (bc.bigintToText(verified) == digest) {
-      const event = await Event.findOne({ name: eventName });
-      if (event == null) {
-        res.status(404).send({ message: "Error. Event not found." });
-        return;
-      }
-      Event.findOneAndUpdate(
-        { name: eventName },
-        { $pull: { pubKeys: digest } },
-        { new: true },
-        function (error, affected) {
-          console.log(event);
-          console.log(affected);
-          if (error) {
-            console.log(error);
-            res
-              .status(500)
-              .send({ message: "Error deleting the user to event." });
-            return;
-          } else if (event.pubKeys.length == affected!.pubKeys.length) {
-            res.status(404).send({
-              message: "User not present in event",
-            });
-            return;
-          } else {
-            res.status(200).send({
-              message: "You left the event",
-            });
-          }
-        }
-      );
-    } else {
-      res.status(403).send({ message: `Bad auth` });
+    console.log(bc.bigintToText(verified));
+    //if (bc.bigintToText(verified) == digest) {
+    const event = await Event.findOne({ name: eventName });
+    if (event == null) {
+      res.status(404).send({ message: "Error. Event not found." });
+      return;
     }
+    Event.findOneAndUpdate(
+      { name: eventName },
+      { $pull: { pubKeys: bc.bigintToText(verified) } },
+      { new: true },
+      function (error, affected) {
+        console.log(event);
+        console.log(affected);
+        if (error) {
+          console.log(error);
+          res
+            .status(500)
+            .send({ message: "Error deleting the user to event." });
+          return;
+        } else if (event.pubKeys.length == affected!.pubKeys.length) {
+          res.status(404).send({
+            message: "User not present in event",
+          });
+          return;
+        } else {
+          res.status(200).send({
+            message: "You left the event",
+          });
+        }
+      }
+    );
+    /* } else {
+      res.status(403).send({ message: `Bad auth` });
+    } */
   } catch (e) {
     res.status(500).send({ message: `Server error: ${e}` });
   }

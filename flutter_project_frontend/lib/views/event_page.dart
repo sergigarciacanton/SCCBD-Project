@@ -1,12 +1,14 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter_project_frontend/models/event.dart';
 import 'package:flutter_project_frontend/routes/event_service.dart';
-import 'package:flutter_project_frontend/routes/user_service.dart';
-import 'package:flutter_project_frontend/views/user_view.dart';
 import 'package:flutter_project_frontend/views/widgets/new_event.dart';
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
+import 'package:flutter_bigint_conversion/flutter_bigint_conversion.dart';
+import 'package:flutter_rsa_module/flutter_rsa_module.dart';
+import 'package:crypto/crypto.dart';
 
 class EventPage extends StatefulWidget {
   final Function? setMainComponent;
@@ -39,20 +41,22 @@ class _EventPageState extends State<EventPage> {
 
   //GET ELEMENTID WITH widget.elementId;
   Future<Event> fetchEvent() async {
-    storage = LocalStorage('BookHub');
+    storage = LocalStorage('SCCBD');
     await storage.ready;
 
-    userName = LocalStorage('BookHub').getItem('userName');
-    return EventService.getEvent(widget.elementId!);
+    userName = LocalStorage('SCCBD').getItem('userName');
+    Event event = await EventService.getEvent(widget.elementId!);
+    eventName = event.name;
+    return event;
   }
 
-  Future<void> leaveEvent() async {
-    await EventService.leaveEvent(widget.elementId!);
+  Future<void> leaveEvent(RsaJsonPubKey pubKey, String signature) async {
+    await EventService.leaveEvent(widget.elementId!, pubKey, signature);
     setState(() {});
   }
 
-  Future<void> joinEvent() async {
-    await EventService.joinEvent(widget.elementId!);
+  Future<void> joinEvent(List<String> pubKeys) async {
+    await EventService.joinEvent(widget.elementId!, pubKeys);
     setState(() {});
   }
 
@@ -112,7 +116,6 @@ class _EventPageState extends State<EventPage> {
                 ));
           } else if (snapshot.hasError) {
             log(snapshot.error.toString());
-            print(snapshot.error);
             //   throw snapshot.error.hashCode;
           }
           return Center(
@@ -141,7 +144,7 @@ class _EventPageState extends State<EventPage> {
               )
             ])),
         _buildSeparator(screenSize),
-        _buildNumSpots(context, snapshot),
+        _buildAvailableSpots(context, snapshot),
         _buildSeparator(screenSize),
         _buildButtons(snapshot),
       ],
@@ -159,7 +162,8 @@ class _EventPageState extends State<EventPage> {
         ));
   }
 
-  Widget _buildNumSpots(BuildContext context, AsyncSnapshot<Event> snapshot) {
+  Widget _buildAvailableSpots(
+      BuildContext context, AsyncSnapshot<Event> snapshot) {
     TextStyle bioTextStyle = const TextStyle(
       fontWeight: FontWeight.w500,
       fontStyle: FontStyle.italic,
@@ -170,7 +174,7 @@ class _EventPageState extends State<EventPage> {
       color: Theme.of(context).scaffoldBackgroundColor,
       padding: const EdgeInsets.all(8.0),
       child: Text(
-        snapshot.data!.numSpots.toString(),
+        snapshot.data!.availableSpots.toString(),
         textAlign: TextAlign.center,
         style: bioTextStyle,
       ),
@@ -210,7 +214,44 @@ class _EventPageState extends State<EventPage> {
                               fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         onPressed: () async {
-                          leaveEvent();
+                          String storedPubKeyJson =
+                              storage.getItem(eventName + '_pub');
+                          String storedPrivKeyJson =
+                              storage.getItem(eventName + '_priv');
+
+                          // Convert the JSON string back to a map of BigInts
+                          Map<String, BigInt> storedPubKeyMap =
+                              (jsonDecode(storedPubKeyJson)
+                                      as Map<String, dynamic>)
+                                  .map((k, v) => MapEntry(k, BigInt.parse(v)));
+                          Map<String, BigInt> storedPrivKeyMap =
+                              (jsonDecode(storedPrivKeyJson)
+                                      as Map<String, dynamic>)
+                                  .map((k, v) => MapEntry(k, BigInt.parse(v)));
+
+                          String pubKeyJson =
+                              jsonEncode(storedPubKeyJson).replaceAll("\\", "");
+
+                          BigInt storedPubKeyE = storedPubKeyMap['e']!;
+                          BigInt storedPubKeyN = storedPubKeyMap['n']!;
+                          BigInt storedPrivKeyD = storedPrivKeyMap['d']!;
+
+                          KeyPair storedKeyPair;
+                          // Convert the map of BigInts back to a KeyPair
+                          storedKeyPair = KeyPair(
+                              RsaPubKey(storedPubKeyE, storedPubKeyN),
+                              RsaPrivKey(storedPrivKeyD, storedPubKeyN));
+                          var encoded = utf8.encode(pubKeyJson);
+                          List<int> copy = List.from(encoded);
+                          copy.removeAt(0);
+                          copy.removeLast();
+                          print(pubKeyJson.toString());
+                          print(copy);
+                          leaveEvent(
+                              storedKeyPair.pubKey.toJSON(),
+                              bigintToBase64(storedKeyPair.privKey.sign(
+                                  textToBigint(
+                                      sha256.convert(copy).toString()))));
                         }),
                     constraints: const BoxConstraints(maxWidth: 200))
                 : Container(),
@@ -235,7 +276,22 @@ class _EventPageState extends State<EventPage> {
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                     onPressed: () async {
-                      joinEvent();
+                      KeyPair keyPair = generateKeyPair(1024);
+                      Map<String, String> pubKeyMap = {
+                        'e': keyPair.pubKey.e.toString(),
+                        'n': keyPair.pubKey.n.toString()
+                      };
+                      Map<String, String> privKeyMap = {
+                        'd': keyPair.privKey.d.toString(),
+                        'n': keyPair.privKey.n.toString()
+                      };
+                      storage.setItem(
+                          eventName + '_pub', jsonEncode(pubKeyMap));
+                      storage.setItem(
+                          eventName + '_priv', jsonEncode(privKeyMap));
+                      String pubKeyJson = jsonEncode(pubKeyMap);
+                      joinEvent(
+                          [sha256.convert(utf8.encode(pubKeyJson)).toString()]);
                     }),
                 constraints: const BoxConstraints(maxWidth: 200))
           ],

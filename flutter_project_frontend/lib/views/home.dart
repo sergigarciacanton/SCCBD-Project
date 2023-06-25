@@ -19,7 +19,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final LocalStorage storage = LocalStorage('BookHub');
+  final LocalStorage storage = LocalStorage('SCCBD');
   ScrollController _controller = ScrollController();
   TextEditingController findBooksController = TextEditingController();
   TextEditingController findEventsController = TextEditingController();
@@ -75,14 +75,14 @@ class _HomeState extends State<Home> {
       if (_events[i].name == name) {
         widget.setMainComponent!(EventPage(
             setMainComponent: widget.setMainComponent,
-            elementId: _events[i].id));
+            elementId: _events[i].name));
         findEventsController.text = "";
       }
     }
   }
 
   bool verifyAdminEvent(int index) {
-    if (_events[index].admin.id == LocalStorage('BookHub').getItem('userId')) {
+    if (_events[index].admin.id == LocalStorage('SCCBD').getItem('userId')) {
       return true;
     } else {
       return false;
@@ -177,8 +177,9 @@ class _HomeState extends State<Home> {
                                         _events[index].date.month.toString() +
                                         "-" +
                                         _events[index].date.year.toString(),
-                                    numberUsers:
-                                        _events[index].numSpots.toString(),
+                                    numberUsers: _events[index]
+                                        .availableSpots
+                                        .toString(),
                                     admin: verifyAdminEvent(index),
                                     setMainComponent: widget.setMainComponent,
                                     id: _events[index].id,

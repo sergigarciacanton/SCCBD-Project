@@ -30,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     AuthService authService = AuthService();
-    final LocalStorage storage = LocalStorage('BookHub');
+    final LocalStorage storage = LocalStorage('SCCBD');
 
     return FutureBuilder(
         future: getThemeMode(),

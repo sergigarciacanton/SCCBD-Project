@@ -5,19 +5,19 @@ Repository for Cibersecurity part of subject Smart Cities: Ciberseguretat i Big 
 This repo contains modules and apps for both the class regular modules and the project modules. More precisely, this is the list of folders (one module in each one) used by each part:
 
 - Modules:
-   - rsa-module
-   - paillier-module
-   - shamir-module
-   - Node-Express-API
-   - Angular-Client
+  - rsa-module
+  - paillier-module
+  - shamir-module
+  - Node-Express-API
+  - Angular-Client
 - Project:
-   - flutter_bigint_conversion
-   - flutter_bigint_crypto_utils
-   - flutter_rsa_module
-   - project_backend
-   - flutter_project_frontend
-   - rsa-module
-   
+  - flutter_bigint_conversion
+  - flutter_bigint_crypto_utils
+  - flutter_rsa_module
+  - project_backend
+  - flutter_project_frontend
+  - rsa-module
+
 Moreover, this repo also contains a JSON file that can be loaded on Insomnia for testing servers' behaviour
 
 ## rsa-module
@@ -45,15 +45,15 @@ npm install ../rsa-module
 import * as rsa from "../rsa-module";
 import * as bc from "bigint-conversion";
 
-const keys: rsa.KeyPair = await rsa.generateKeyPair(1024);  // Generate a pair of 1024 bits long RSA keys
+const keys: rsa.KeyPair = await rsa.generateKeyPair(1024); // Generate a pair of 1024 bits long RSA keys
 
 const plaintext: string = "1234567890";
 
-const ciphertext: bigint = keys.pubKey.encrypt(bc.textToBigint(plaintext));  // Encrypt a message
-const decrypted = bc.bigintToText(keys.privKey.decrypt(ciphertext));  // Decrypt a message
+const ciphertext: bigint = keys.pubKey.encrypt(bc.textToBigint(plaintext)); // Encrypt a message
+const decrypted = bc.bigintToText(keys.privKey.decrypt(ciphertext)); // Decrypt a message
 
-const signed = keys.privKey.sign(plaintext);  // Sign a message
-const verified = keys.pubKey.verify(signed);  // Verify a message
+const signed = keys.privKey.sign(plaintext); // Sign a message
+const verified = keys.pubKey.verify(signed); // Verify a message
 
 const jsonMessage = rsa.JsonMessage.toJSON(verified);
 const jsonParsed = rsa.JsonMessage.fromJSON(jsonMessage);
@@ -202,7 +202,7 @@ Follow these steps in order to set up the server:
 The default configuration starts the server listening at localhost on TCP port `3000`
 
 ## Angular-Client
- 
+
 This folder contains an Angular client that allows a user to test the server of the module Node-Express-API in a friendly way.
 
 This module's dependencies are `npm` modules `bigint-crypto-utils`, `bigint-conversion`, `rsa-module` and `paillier-module`, which can be installed with the following console commands:
@@ -283,7 +283,7 @@ As this module is not part of any pub package (it is just a local module) it has
 
 ```yaml
 flutter_bigint_crypto_utils:
-  path: ../flutter_bigint_conversion
+  path: ../flutter_bigint_crypto_utils
 ```
 
 After saving the file, `flutter pub get` should run by itself. If not, please type the console command `flutter pub get`

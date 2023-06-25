@@ -12,7 +12,7 @@ class UserService {
 
     final response = await http.get(
       url,
-      headers: {'authorization': LocalStorage('BookHub').getItem('token')},
+      headers: {'authorization': LocalStorage('SCCBD').getItem('token')},
     );
     Object data = jsonDecode(response.body);
 
@@ -27,7 +27,7 @@ class UserService {
 
     final response = await http.get(
       url,
-      headers: {'authorization': LocalStorage('BookHub').getItem('token')},
+      headers: {'authorization': LocalStorage('SCCBD').getItem('token')},
     );
     List data = jsonDecode(response.body);
     return User.usersFromSnapshot(data);
@@ -41,7 +41,7 @@ class UserService {
 
     final response = await http.put(url,
         headers: {
-          'authorization': LocalStorage('BookHub').getItem('token'),
+          'authorization': LocalStorage('SCCBD').getItem('token'),
           "Content-Type": "application/json"
         },
         body: json.encode({'name': name, 'type': type}));
@@ -61,7 +61,7 @@ class UserService {
 
     final response = await http.post(url,
         headers: {
-          'authorization': LocalStorage('BookHub').getItem('token'),
+          'authorization': LocalStorage('SCCBD').getItem('token'),
           "Content-Type": "application/json"
         },
         body: json.encode({
@@ -84,7 +84,7 @@ class UserService {
     final response = await http.delete(
       url,
       headers: {
-        'authorization': LocalStorage('BookHub').getItem('token'),
+        'authorization': LocalStorage('SCCBD').getItem('token'),
       },
     );
 

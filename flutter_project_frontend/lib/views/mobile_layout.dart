@@ -44,7 +44,7 @@ class _MobileLayoutState extends State<MobileLayout> {
     // });
   }
 
-  final LocalStorage storage = LocalStorage('BookHub');
+  final LocalStorage storage = LocalStorage('SCCBD');
   int _selectedIndex = 0;
   PageController pageController = PageController();
   String appBarTitle = 'Home';

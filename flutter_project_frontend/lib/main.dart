@@ -75,7 +75,7 @@ class _MyAppState extends State<MyApp> {
             final themeProvider = Provider.of<ThemeProvider>(context);
             return MaterialApp(
                 debugShowCheckedModeBanner: false,
-                title: "BookHub",
+                title: "SCCBD",
                 theme: notifier.isDarkMode
                     ? MyThemes.darkTheme
                     : MyThemes.lightTheme,
@@ -98,7 +98,7 @@ class _MyAppState extends State<MyApp> {
                     splash: "public/logosplash.png",
                     splashIconSize: 500,
                     screenFunction: () async {
-                      var storage = LocalStorage('BookHub');
+                      var storage = LocalStorage('SCCBD');
                       await storage.ready;
 
                       // SharedPreferences _pref =
@@ -108,7 +108,7 @@ class _MyAppState extends State<MyApp> {
                       //   await _pref.setBool("theme", true);
                       // }
 
-                      var token = LocalStorage('BookHub').getItem('token');
+                      var token = LocalStorage('SCCBD').getItem('token');
                       if (token == null) {
                         return const LoginPage();
                       }

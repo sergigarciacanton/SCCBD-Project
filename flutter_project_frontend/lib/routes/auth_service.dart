@@ -6,7 +6,7 @@ import 'package:localstorage/localstorage.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 
 class AuthService {
-  final LocalStorage storage = LocalStorage('BookHub');
+  final LocalStorage storage = LocalStorage('SCCBD');
   static var baseUrl = checkPlatform();
   //10.0.2.2 (emulador Android)
 

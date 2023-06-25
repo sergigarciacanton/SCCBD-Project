@@ -41,7 +41,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     AuthService authService = AuthService();
-    final LocalStorage storage = LocalStorage('BookHub');
+    final LocalStorage storage = LocalStorage('SCCBD');
 
     return Scaffold(
       body: Center(

@@ -59,6 +59,7 @@ async function main() {
   const jsonPubKey = keys.pubKey.toJSON();
   console.log("JSON pubKey");
   console.log(jsonPubKey);
+  console.log(JSON.stringify(jsonPubKey));
   const stringPubKey = await objectSha.digest(JSON.stringify(jsonPubKey));
   console.log("String pubKey's hash");
   console.log(stringPubKey);

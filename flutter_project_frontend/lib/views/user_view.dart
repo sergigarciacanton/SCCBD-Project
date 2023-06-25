@@ -32,7 +32,7 @@ class _UserViewState extends State<UserView> {
 
   Future<dynamic> fetchUser() async {
     currentUser = await UserService.getUserByUserName(
-        LocalStorage('BookHub').getItem('userName'));
+        LocalStorage('SCCBD').getItem('userName'));
     return currentUser;
   }
 
@@ -106,7 +106,7 @@ class _UserViewState extends State<UserView> {
                                       .color),
                               children: <TextSpan>[
                             TextSpan(
-                                text: snapshot.data!.name,
+                                text: snapshot.data!.pubKey,
                                 style: const TextStyle(
                                     fontWeight: FontWeight.normal))
                           ])),
@@ -192,7 +192,7 @@ class _UserViewState extends State<UserView> {
             child: Column(children: <Widget>[
               ListTile(
                 contentPadding: EdgeInsets.fromLTRB(15, 10, 25, 0),
-                title: Text(element.name),
+                title: Text(element.pubKey),
                 subtitle: Text(
                     "Participants: " + element.usersList.length.toString()),
               ),
