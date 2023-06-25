@@ -96,7 +96,7 @@ class _UserViewState extends State<UserView> {
                       padding: const EdgeInsets.only(top: 35, left: 20),
                       child: RichText(
                           text: TextSpan(
-                              text: 'name: ',
+                              text: 'Name: ',
                               style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
@@ -116,7 +116,7 @@ class _UserViewState extends State<UserView> {
                             padding: const EdgeInsets.only(top: 15, left: 20),
                             child: RichText(
                                 text: TextSpan(
-                                    text: "mail: ",
+                                    text: "Mail: ",
                                     style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold,
@@ -137,7 +137,7 @@ class _UserViewState extends State<UserView> {
                             Padding(
                                 padding: const EdgeInsets.only(left: 20),
                                 child: Text(
-                                  'clubs',
+                                  'Clubs',
                                   style: const TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold),
@@ -146,7 +146,7 @@ class _UserViewState extends State<UserView> {
                                 padding: const EdgeInsets.only(
                                     top: 15, left: 20, bottom: 15),
                                 child: Text(
-                                  'events',
+                                  'Events',
                                   style: const TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold),
@@ -194,7 +194,7 @@ class _UserViewState extends State<UserView> {
                 contentPadding: EdgeInsets.fromLTRB(15, 10, 25, 0),
                 title: Text(element.name),
                 subtitle: Text(
-                    "participants: " + element.usersList.length.toString()),
+                    "Participants: " + element.usersList.length.toString()),
               ),
               Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -203,7 +203,7 @@ class _UserViewState extends State<UserView> {
                       width: 30,
                     ),
                     ElevatedButton(
-                        child: Text('more'),
+                        child: Text('More'),
                         onPressed: () => {
                               Navigator.of(context).pop(),
                               widget.setMainComponent!(EventPage(

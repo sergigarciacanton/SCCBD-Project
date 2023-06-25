@@ -1,5 +1,6 @@
 library flutter_rsa_module;
 
+import 'package:flutter_bigint_conversion/flutter_bigint_conversion.dart' as bc;
 import 'package:flutter_bigint_crypto_utils/flutter_bigint_crypto_utils.dart';
 export 'flutter_rsa_module.dart';
 
@@ -16,6 +17,16 @@ class RsaPubKey {
   BigInt verify(BigInt s) {
     return s.modPow(e, n);
   }
+
+  RsaJsonPubKey toJSON() {
+    return RsaJsonPubKey(bc.bigintToBase64(e), bc.bigintToBase64(n));
+  }
+
+  static RsaPubKey fromJSON(RsaJsonPubKey rsaJsonPubKey) {
+    var e = bc.base64ToBigint(rsaJsonPubKey.e);
+    var n = bc.base64ToBigint(rsaJsonPubKey.n);
+    return RsaPubKey(e, n);
+  }
 }
 
 class RsaPrivKey {
@@ -31,6 +42,16 @@ class RsaPrivKey {
   BigInt sign(BigInt m) {
     return m.modPow(d, n);
   }
+
+  RsaJsonPubKey toJSON() {
+    return RsaJsonPubKey(bc.bigintToBase64(d), bc.bigintToBase64(n));
+  }
+
+  static RsaPubKey fromJSON(RsaJsonPubKey rsaJsonPubKey) {
+    var e = bc.base64ToBigint(rsaJsonPubKey.e);
+    var n = bc.base64ToBigint(rsaJsonPubKey.n);
+    return RsaPubKey(e, n);
+  }
 }
 
 class KeyPair {
@@ -38,6 +59,20 @@ class KeyPair {
   final RsaPrivKey privKey;
 
   KeyPair(this.pubKey, this.privKey);
+}
+
+class RsaJsonPubKey {
+  String e; // base64
+  String n; // base64
+
+  RsaJsonPubKey(this.e, this.n);
+}
+
+class RsaJsonPrivKey {
+  String d; // base64
+  String n; // base64
+
+  RsaJsonPrivKey(this.d, this.n);
 }
 
 KeyPair generateKeyPair(int bitLength) {

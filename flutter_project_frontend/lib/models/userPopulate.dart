@@ -5,7 +5,7 @@ class UserPopulate {
   UserPopulate({required this.id, required this.name});
 
   factory UserPopulate.fromJson(dynamic json) {
-    var userName = json['userName'] as String;
+    var userName = json['name'] as String;
 
     var u = UserPopulate(
       id: json['_id'] as String,

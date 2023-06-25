@@ -48,7 +48,7 @@ class _SettingPageState extends State<SettingPage> {
           body: SafeArea(
               child: ListView(padding: EdgeInsets.all(24), children: [
         Text(
-          'settings',
+          'Settings',
           style: const TextStyle(
             fontSize: 40,
           ),
@@ -57,7 +57,7 @@ class _SettingPageState extends State<SettingPage> {
           height: 32,
         ),
         SettingsGroup(
-          title: 'general',
+          title: 'GENERAL ',
           children: <Widget>[
             buildAccountTheme(context),
             AccountPage(),
@@ -70,13 +70,13 @@ class _SettingPageState extends State<SettingPage> {
       ])));
 
   Widget buildEditProfile() => SimpleSettingsTile(
-        title: 'viewProfile',
+        title: 'View profile',
         subtitle: '',
         leading: const IconWidget(icon: Icons.face, color: Colors.orange),
         child: EditProfile(),
       );
   Widget buildLogout() => SimpleSettingsTile(
-      title: 'logout',
+      title: 'Log out',
       subtitle: '',
       leading: const IconWidget(icon: Icons.logout, color: Colors.blueAccent),
       onTap: () => {
@@ -87,7 +87,7 @@ class _SettingPageState extends State<SettingPage> {
           });
 
   Widget buildPassword() => SimpleSettingsTile(
-      title: 'changePsw',
+      title: 'Change password',
       subtitle: '',
       leading: const IconWidget(icon: Icons.lock, color: Colors.purpleAccent),
       onTap: () => {
@@ -105,12 +105,12 @@ class _SettingPageState extends State<SettingPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'changePsw',
+                            'Change password',
                             style: TextStyle(fontSize: 20),
                           ),
-                          buildEdit('oldPsw', controllerOld),
-                          buildEdit('newPsw', controllerNew),
-                          buildEdit('repeatPsw', controllerCheck),
+                          buildEdit('Old password', controllerOld),
+                          buildEdit('New password', controllerNew),
+                          buildEdit('Repeat password', controllerCheck),
                           ElevatedButton(
                               onPressed: () {
                                 if (controllerOld.text.isEmpty &&
@@ -131,7 +131,7 @@ class _SettingPageState extends State<SettingPage> {
                                   }
                                 }
                               },
-                              child: Text('change'))
+                              child: Text('Change'))
                         ],
                       ),
                     ),
@@ -158,7 +158,7 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   Widget buildDeleteAccount() => SimpleSettingsTile(
-      title: 'deleteAccount',
+      title: 'Delete Account',
       subtitle: '',
       leading: const IconWidget(icon: Icons.delete, color: Colors.pink),
       onTap: () async => {

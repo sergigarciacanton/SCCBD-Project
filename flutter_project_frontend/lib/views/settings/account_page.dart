@@ -25,13 +25,13 @@ class _AccountPageState extends State<AccountPage> {
       Navigator.pop(context, route);
     }
 
-    String lenguage = 'lenguageCode';
+    String lenguage = 'en';
     return SimpleSettingsTile(
-        title: 'accountSettings',
-        subtitle: 'accountSettingsSub',
+        title: 'Account Settings',
+        subtitle: 'Privacy, Security, Language',
         leading: const IconWidget(icon: Icons.person, color: Colors.green),
         child: SettingsScreen(
-          title: 'accountSettings',
+          title: 'Account Settings',
           children: <Widget>[
             buildLanguage(context, lenguage, reload),
             buildPrivacy(context),
@@ -49,7 +49,7 @@ class _AccountPageState extends State<AccountPage> {
           const SizedBox(
             width: 20,
           ),
-          Text('language2'),
+          Text('Language'),
           const Spacer(),
           DropdownButton(
               value: lenguage,
@@ -80,19 +80,19 @@ class _AccountPageState extends State<AccountPage> {
       );
 
   Widget buildPrivacy(BuildContext context) => SimpleSettingsTile(
-      title: 'privacy',
+      title: 'Privacy',
       subtitle: '',
       leading: const IconWidget(icon: Icons.lock, color: Colors.blue),
       onTap: () => {});
 
   Widget buildSecurity(BuildContext context) => SimpleSettingsTile(
-      title: 'security',
+      title: 'Security',
       subtitle: '',
       leading: const IconWidget(icon: Icons.security, color: Colors.red),
       onTap: () => {});
 
   Widget buildAccountInfo(BuildContext context) => SimpleSettingsTile(
-      title: 'accountInfo',
+      title: 'Account info',
       subtitle: '',
       leading: const IconWidget(icon: Icons.text_snippet, color: Colors.purple),
       onTap: () => {});

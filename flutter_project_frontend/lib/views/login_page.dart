@@ -55,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
                             ? Image.asset("public/logowhite.png")
                             : Image.asset("public/logo.png"),
                         Text(
-                          'signIn',
+                          'Sign in',
                           style: const TextStyle(
                               fontSize: 50, fontWeight: FontWeight.bold),
                         ),
@@ -74,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
                                     color: Theme.of(context).backgroundColor,
                                     width: 3.0),
                               ),
-                              hintText: 'username',
+                              hintText: 'Username',
                             ),
                           ),
                         ),
@@ -94,7 +94,7 @@ class _LoginPageState extends State<LoginPage> {
                                     color: Theme.of(context).backgroundColor,
                                     width: 3.0),
                               ),
-                              hintText: 'password',
+                              hintText: 'Password',
                             ),
                           ),
                         ),
@@ -109,7 +109,7 @@ class _LoginPageState extends State<LoginPage> {
                                   Size(MediaQuery.of(context).size.width, 60)),
                             ),
                             child: Text(
-                              'submit',
+                              'Submit',
                               style: const TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.bold),
                             ),
@@ -149,7 +149,7 @@ class _LoginPageState extends State<LoginPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              'stillWithoutAccount',
+                              'Still without account?',
                               style: const TextStyle(
                                 fontSize: 15,
                               ),
@@ -157,7 +157,7 @@ class _LoginPageState extends State<LoginPage> {
                             const SizedBox(width: 5),
                             TextButton(
                               child: Text(
-                                'register',
+                                'Register',
                                 style: TextStyle(
                                   fontSize: 15,
                                   color: Theme.of(context).backgroundColor,

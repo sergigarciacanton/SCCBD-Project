@@ -16,7 +16,6 @@ class EventService {
       url,
       headers: {'authorization': LocalStorage('BookHub').getItem('token')},
     );
-    print(response.body);
     List data = jsonDecode(response.body);
     return Event.eventsFromSnapshot(data);
   }
@@ -35,36 +34,34 @@ class EventService {
     return Event.fromJson(data);
   }
 
-  static Future<bool> joinEvent(String eventId) async {
-    String userId = LocalStorage('BookHub').getItem('userId');
+  static Future<bool> joinEvent(String eventName) async {
     Uri url = Uri.parse(const String.fromEnvironment('API_URL',
             defaultValue: 'http://localhost:3000') +
-        '/api/event/join/$userId/$eventId');
+        '/api/event/join/$eventName');
 
-    final response = await http.put(
-      url,
-      headers: {
-        'authorization': LocalStorage('BookHub').getItem('token'),
-      },
-    );
+    final response = await http.put(url,
+        headers: {
+          'authorization': LocalStorage('BookHub').getItem('token'),
+          "Content-Type": "application/json"
+        },
+        body: json.encode(''));
     if (response.statusCode == 200) {
       return true;
     }
     return false;
   }
 
-  static Future<bool> leaveEvent(String eventId) async {
-    String userId = LocalStorage('BookHub').getItem('userId');
+  static Future<bool> leaveEvent(String eventName) async {
     Uri url = Uri.parse(const String.fromEnvironment('API_URL',
             defaultValue: 'http://localhost:3000') +
-        '/api/event/leave/$userId/$eventId');
+        '/api/event/leave/$eventName');
 
-    final response = await http.put(
-      url,
-      headers: {
-        'authorization': LocalStorage('BookHub').getItem('token'),
-      },
-    );
+    final response = await http.put(url,
+        headers: {
+          'authorization': LocalStorage('BookHub').getItem('token'),
+          "Content-Type": "application/json"
+        },
+        body: json.encode(''));
     if (response.statusCode == 200) {
       return true;
     }

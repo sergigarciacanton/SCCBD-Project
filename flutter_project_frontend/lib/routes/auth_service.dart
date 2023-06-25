@@ -3,9 +3,7 @@ import 'package:flutter_project_frontend/models/login.dart';
 import 'package:flutter_project_frontend/models/register.dart';
 import 'package:http/http.dart' as http;
 import 'package:localstorage/localstorage.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:jwt_decode/jwt_decode.dart';
-import 'dart:io' show Platform;
 
 class AuthService {
   final LocalStorage storage = LocalStorage('BookHub');
@@ -38,7 +36,6 @@ class AuthService {
       storage.setItem('userId', payload['id']);
       return "200";
     } else {
-      print(res.body);
       return Message.fromJson(await jsonDecode(res.body)).message;
     }
   }
@@ -56,7 +53,6 @@ class AuthService {
       storage.setItem('userId', payload['id']);
       return "201";
     } else {
-      print(res.body);
       return Message.fromJson(await jsonDecode(res.body)).message;
     }
   }

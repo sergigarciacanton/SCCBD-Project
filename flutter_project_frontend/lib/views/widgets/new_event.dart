@@ -72,9 +72,9 @@ class _NewEventState extends State<NewEvent> {
     return Scaffold(
         appBar: AppBar(
           title: widget.eventId == null
-              ? Text("newEvent",
+              ? Text("N E W  E V E N T",
                   style: const TextStyle(fontWeight: FontWeight.bold))
-              : Text("editEvent",
+              : Text("E D I T  E V E N T",
                   style: const TextStyle(fontWeight: FontWeight.bold)),
           centerTitle: true,
           backgroundColor: Theme.of(context).backgroundColor,
@@ -127,14 +127,14 @@ class _NewEventState extends State<NewEvent> {
                           controller: nameController,
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return "fieldRequired";
+                              return "This field is required";
                             }
                             return null;
                           },
                           style: const TextStyle(fontSize: 20),
                           decoration: InputDecoration(
-                              labelText: "name",
-                              hintText: "writeTheNameEvent",
+                              labelText: "Name",
+                              hintText: "Write the name of the event",
                               border: OutlineInputBorder()),
                         )),
                     const SizedBox(
@@ -147,14 +147,14 @@ class _NewEventState extends State<NewEvent> {
                           controller: nameController,
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return "fieldRequired";
+                              return "This field is required";
                             }
                             return null;
                           },
                           style: const TextStyle(fontSize: 20),
                           decoration: InputDecoration(
-                              labelText: "name",
-                              hintText: "writeTheNameEvent",
+                              labelText: "Name",
+                              hintText: "Write the name of the event",
                               border: const OutlineInputBorder()),
                         )),
                     const SizedBox(
@@ -169,14 +169,14 @@ class _NewEventState extends State<NewEvent> {
                           maxLength: 500,
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return "fieldRequired";
+                              return "This field is required";
                             }
                             return null;
                           },
                           style: const TextStyle(fontSize: 20),
                           decoration: InputDecoration(
-                              labelText: "description",
-                              hintText: "writeTheDescription",
+                              labelText: "Description",
+                              hintText: "Write the description of the event",
                               border: const OutlineInputBorder()),
                         )),
                     const SizedBox(
@@ -191,7 +191,7 @@ class _NewEventState extends State<NewEvent> {
                         firstDate: DateTime(1900),
                         lastDate: DateTime(2030),
                         icon: const Icon(Icons.event),
-                        dateLabelText: "eventDate",
+                        dateLabelText: "Date",
                         onSaved: (val) => eventDateController = val!,
                         onChanged: (val) => eventDateController = val,
                         onFieldSubmitted: (val) => eventDateController = val,
@@ -204,7 +204,7 @@ class _NewEventState extends State<NewEvent> {
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          'selectCategories',
+                          'Select related categories',
                           textAlign: TextAlign.center,
                           style: const TextStyle(fontSize: 20),
                         ),
@@ -216,11 +216,11 @@ class _NewEventState extends State<NewEvent> {
                     ElevatedButton(
                       child: widget.eventId == null
                           ? Text(
-                              "addNewEvent",
+                              "Create new event",
                               textScaleFactor: 1,
                             )
                           : Text(
-                              "submitEditEvent",
+                              "Edit event",
                               textScaleFactor: 1,
                             ),
                       onPressed: () async {

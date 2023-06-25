@@ -78,7 +78,7 @@ class _WebLayoutState extends State<WebLayout> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Text(
-                        'chatTitle',
+                        'Chat',
                         style: TextStyle(
                             color: Theme.of(context).backgroundColor,
                             fontSize: 20,
@@ -93,7 +93,7 @@ class _WebLayoutState extends State<WebLayout> {
                             setMainComponent: setMainComponent,
                           )), */
                       Text(
-                        'eventTitle',
+                        'Event',
                         style: TextStyle(
                             color: Theme.of(context).backgroundColor,
                             fontSize: 20,
@@ -108,7 +108,7 @@ class _WebLayoutState extends State<WebLayout> {
                             setMainComponent: setMainComponent,
                           )), */
                       Text(
-                        'clubTitle',
+                        'Club',
                         style: TextStyle(
                             color: Theme.of(context).backgroundColor,
                             fontSize: 20,

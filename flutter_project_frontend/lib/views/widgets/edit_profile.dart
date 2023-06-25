@@ -21,10 +21,10 @@ class _EditProfileState extends State<EditProfile> {
 
   TextEditingController controllerName = TextEditingController(text: 'Name');
   TextEditingController controllerUserName =
-      TextEditingController(text: 'userName');
+      TextEditingController(text: 'Username');
   TextEditingController controllerMail = TextEditingController(text: 'mail');
   TextEditingController controllerBiography =
-      TextEditingController(text: 'biography');
+      TextEditingController(text: 'Biography');
 
   String controllerBirthDay = "";
   String userPhotoURL = "";
@@ -55,7 +55,7 @@ class _EditProfileState extends State<EditProfile> {
               appBar: AppBar(
                 foregroundColor: Theme.of(context).primaryColor,
                 title: Text(
-                  'editProfile',
+                  'Edit Profile',
                 ),
                 backgroundColor: Theme.of(context).backgroundColor,
                 elevation: 1,
@@ -94,7 +94,7 @@ class _EditProfileState extends State<EditProfile> {
                                     isEditing = false;
                                   });
                                 },
-                                child: Text('returnToHome',
+                                child: Text('Return',
                                     style: const TextStyle(
                                         fontSize: 14,
                                         letterSpacing: 2.2,
@@ -112,9 +112,9 @@ class _EditProfileState extends State<EditProfile> {
                                       });
                                     }
                                   } else {
-                                    String error = "Se ha producido un error";
+                                    String error = "Error";
                                     controllerName.text.isEmpty
-                                        ? error = "Name empty"
+                                        ? error = "Empty name"
                                         : null;
                                     showDialog(
                                       context: context,
@@ -132,7 +132,7 @@ class _EditProfileState extends State<EditProfile> {
                                           Colors.green),
                                 ),
                                 child: Text(
-                                  'accept',
+                                  'Accept',
                                   style: const TextStyle(
                                       fontSize: 14,
                                       letterSpacing: 2.2,
@@ -167,7 +167,7 @@ class _EditProfileState extends State<EditProfile> {
   Widget buildData(AsyncSnapshot<User> snapshot) {
     return Column(
       children: [
-        buildEdit('name', controllerName),
+        buildEdit('Name', controllerName),
       ],
     );
   }

@@ -22,10 +22,9 @@ class EventCard extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 22, vertical: 10),
       width: 300,
-      height: 250,
+      height: 190,
       decoration: BoxDecoration(
         color: Colors.black,
-        borderRadius: BorderRadius.circular(15),
         border: Border.all(color: Colors.white, width: 2.0),
         boxShadow: [
           BoxShadow(
@@ -41,15 +40,24 @@ class EventCard extends StatelessWidget {
       ),
       child: Stack(
         children: [
+          GestureDetector(
+            onTap: () {
+              setMainComponent!(EventPage(
+                  setMainComponent: setMainComponent, elementId: title));
+            },
+            child: Image.network(
+              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTL6AwKj-tmkv7rJa6ym_D7_CEwLcRq857S3A&usqp=CAU",
+              fit: BoxFit.cover,
+            ),
+          ),
           Align(
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 10.0),
               child: Container(
                 padding:
                     const EdgeInsets.symmetric(vertical: 4.0, horizontal: 6.0),
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.black,
-                  borderRadius: BorderRadius.circular(4.0),
                 ),
                 child: Text(
                   title,
@@ -70,9 +78,8 @@ class EventCard extends StatelessWidget {
               child: Container(
                 padding:
                     const EdgeInsets.symmetric(vertical: 4.0, horizontal: 6.0),
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.black,
-                  borderRadius: BorderRadius.circular(4.0),
                 ),
                 child: Text(
                   date,

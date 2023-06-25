@@ -105,7 +105,7 @@ class _HomeState extends State<Home> {
                     children: [
                       const SizedBox(width: 25),
                       Text(
-                        'interestEvent',
+                        'Events that may interest you',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Theme.of(context).backgroundColor,
@@ -122,7 +122,7 @@ class _HomeState extends State<Home> {
                               width: 250,
                               child: TextFieldSearch(
                                 initialList: getEventNames(),
-                                label: "find",
+                                label: "Find",
                                 controller: findEventsController,
                               ),
                             ),
@@ -137,13 +137,13 @@ class _HomeState extends State<Home> {
                       width: 250,
                       child: TextFieldSearch(
                         initialList: getEventNames(),
-                        label: "find",
+                        label: "Find",
                         controller: findEventsController,
                       ),
                     )
                   : const SizedBox(height: 0),
               Container(
-                height: 250,
+                height: 190,
                 child: ScrollConfiguration(
                   behavior: ScrollConfiguration.of(context).copyWith(
                     dragDevices: {

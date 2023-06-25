@@ -23,6 +23,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final passwordController = TextEditingController();
   final repeatPasswordController = TextEditingController();
   bool darkTheme = false;
+  bool type = false;
 
   @override
   void initState() {
@@ -61,10 +62,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   darkTheme
                       ? Image.asset("public/logowhite.png")
                       : Image.asset("public/logo.png"),
-                  Text(
-                    'register',
-                    style: const TextStyle(
-                        fontSize: 50, fontWeight: FontWeight.bold),
+                  const Text(
+                    'Register',
+                    style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 30),
                   Container(
@@ -81,7 +81,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               color: Theme.of(context).backgroundColor,
                               width: 2.0),
                         ),
-                        hintText: 'name',
+                        hintText: 'Name',
                       ),
                     ),
                   ),
@@ -101,7 +101,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               color: Theme.of(context).backgroundColor,
                               width: 3.0),
                         ),
-                        hintText: 'password',
+                        hintText: 'Password',
                       ),
                     ),
                   ),
@@ -121,11 +121,29 @@ class _RegisterPageState extends State<RegisterPage> {
                               color: Theme.of(context).backgroundColor,
                               width: 3.0),
                         ),
-                        hintText: 'repeatPassword',
+                        hintText: 'Repeat Password',
                       ),
                     ),
                   ),
                   const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text('Type of user:'),
+                      Switch.adaptive(
+                        activeColor: Theme.of(context).backgroundColor,
+                        onChanged: (value) {
+                          setState(() {
+                            type = value;
+                          });
+                        },
+                        value: type,
+                      ),
+                      type == false
+                          ? const Text('Regular user')
+                          : const Text('Event organizer'),
+                    ],
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -139,9 +157,9 @@ class _RegisterPageState extends State<RegisterPage> {
                           });
                         },
                       ),
-                      Text(
-                        'termsAndConditions',
-                        style: const TextStyle(
+                      const Text(
+                        'Accept Terms and Conditions',
+                        style: TextStyle(
                           fontSize: 15,
                         ),
                       ),
@@ -157,9 +175,9 @@ class _RegisterPageState extends State<RegisterPage> {
                         minimumSize: MaterialStateProperty.all(
                             Size(MediaQuery.of(context).size.width, 60)),
                       ),
-                      child: Text(
-                        'submit',
-                        style: const TextStyle(
+                      child: const Text(
+                        'Submit',
+                        style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       onPressed: () async {
@@ -168,8 +186,9 @@ class _RegisterPageState extends State<RegisterPage> {
                           showDialog(
                             context: context,
                             builder: (context) {
-                              return AlertDialog(
-                                content: Text('passwordError'),
+                              return const AlertDialog(
+                                content: Text(
+                                    "Error. Introduced passwords don't match."),
                               );
                             },
                           );
@@ -177,8 +196,9 @@ class _RegisterPageState extends State<RegisterPage> {
                           showDialog(
                             context: context,
                             builder: (context) {
-                              return AlertDialog(
-                                content: Text('termsError'),
+                              return const AlertDialog(
+                                content: Text(
+                                    'Please, accept terms and conditions.'),
                               );
                             },
                           );
@@ -186,11 +206,15 @@ class _RegisterPageState extends State<RegisterPage> {
                           setState(() {
                             isLoading = true;
                           });
+                          var intType = 0;
+                          if (type == true) {
+                            intType = 1;
+                          }
                           var response = await authService.register(
                               RegisterModel(
                                   name: nameController.text,
                                   password: passwordController.text,
-                                  type: 0));
+                                  type: intType));
                           setState(() {
                             isLoading = false;
                           });
@@ -220,16 +244,16 @@ class _RegisterPageState extends State<RegisterPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        'alreadyWithAccount',
-                        style: const TextStyle(
+                      const Text(
+                        'Already with an account?',
+                        style: TextStyle(
                           fontSize: 15,
                         ),
                       ),
                       const SizedBox(width: 5),
                       TextButton(
                           child: Text(
-                            'signIn',
+                            'Sign in',
                             style: TextStyle(
                               fontSize: 15,
                               color: Theme.of(context).backgroundColor,
