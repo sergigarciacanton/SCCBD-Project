@@ -288,8 +288,10 @@ class _EventPageState extends State<EventPage> {
     if (snapshot.data!.name == true) {
       eventName = snapshot.data!.name;
     }
-    return Text(snapshot.data!.name,
+    return Text("Event: " + snapshot.data!.name,
+        textAlign: TextAlign.center,
         style: const TextStyle(
+          color: Colors.black,
           fontSize: 28.0,
           fontWeight: FontWeight.w700,
         ));
@@ -298,6 +300,7 @@ class _EventPageState extends State<EventPage> {
   Widget _buildAvailableSpots(
       BuildContext context, AsyncSnapshot<Event> snapshot) {
     TextStyle bioTextStyle = const TextStyle(
+      color: Colors.black87,
       fontWeight: FontWeight.w500,
       fontStyle: FontStyle.italic,
       fontSize: 16.0,
@@ -307,7 +310,8 @@ class _EventPageState extends State<EventPage> {
       color: Theme.of(context).scaffoldBackgroundColor,
       padding: const EdgeInsets.all(8.0),
       child: Text(
-        snapshot.data!.availableSpots.toString(),
+        "Number of available spots: " +
+            snapshot.data!.availableSpots.toString(),
         textAlign: TextAlign.center,
         style: bioTextStyle,
       ),

@@ -1,8 +1,4 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:flutter_bigint_conversion/flutter_bigint_conversion.dart';
-import 'package:flutter_bigint_crypto_utils/flutter_bigint_crypto_utils.dart';
-import 'package:flutter_rsa_module/flutter_rsa_module.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
@@ -30,7 +26,6 @@ class _MyAppState extends State<MyApp> {
         create: (context) => ThemeProvider(),
         child: Consumer<ThemeProvider>(
           builder: (context, ThemeProvider notifier, child) {
-            final themeProvider = Provider.of<ThemeProvider>(context);
             return MaterialApp(
                 debugShowCheckedModeBanner: false,
                 title: "SCCBD",
@@ -53,7 +48,8 @@ class _MyAppState extends State<MyApp> {
                 },
                 home: AnimatedSplashScreen.withScreenFunction(
                     duration: 500,
-                    splash: "public/logosplash.png",
+                    splash: Image.network(
+                        "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Logo_UPC.svg/1200px-Logo_UPC.svg.png"),
                     splashIconSize: 500,
                     screenFunction: () async {
                       var storage = LocalStorage('SCCBD');
@@ -78,7 +74,7 @@ class _MyAppState extends State<MyApp> {
                     },
                     splashTransition: SplashTransition.fadeTransition,
                     pageTransitionType: PageTransitionType.fade,
-                    backgroundColor: Colors.blueGrey));
+                    backgroundColor: Colors.grey.shade100));
           },
         ),
       );

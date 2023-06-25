@@ -51,9 +51,8 @@ class _LoginPageState extends State<LoginPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const SizedBox(height: 50),
-                        darkTheme
-                            ? Image.asset("public/logowhite.png")
-                            : Image.asset("public/logo.png"),
+                        Image.network(
+                            "https://drac.bsc.es/sites/default/files/content/partner/image/upc-positiu-p3005-interior-blanc.png"),
                         const Text(
                           'Sign in',
                           style: TextStyle(

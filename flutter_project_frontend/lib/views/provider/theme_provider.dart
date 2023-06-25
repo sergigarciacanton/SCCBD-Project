@@ -37,22 +37,22 @@ class ThemeProvider extends ChangeNotifier {
 
 class MyThemes {
   static final darkTheme = ThemeData(
-      scaffoldBackgroundColor: Colors.grey.shade900,
+      scaffoldBackgroundColor: Colors.grey.shade100,
       primaryColor: Colors.black,
-      primaryColorLight: const Color.fromARGB(181, 255, 153, 0),
-      colorScheme: const ColorScheme.dark(),
-      iconTheme: IconThemeData(color: Colors.orange.shade500),
-      indicatorColor: Colors.teal,
-      backgroundColor: Colors.orange.shade500,
-      shadowColor: const Color.fromARGB(143, 255, 153, 0),
-      appBarTheme: AppBarTheme(backgroundColor: Colors.grey.shade800),
+      primaryColorLight: const Color.fromARGB(255, 0, 123, 192),
+      colorScheme: const ColorScheme.light(),
+      iconTheme: IconThemeData(color: Color.fromARGB(255, 0, 123, 192)),
+      indicatorColor: Colors.grey.shade100,
+      backgroundColor: Color.fromARGB(255, 0, 123, 192),
+      shadowColor: const Color.fromARGB(150, 0, 123, 192),
+      appBarTheme: AppBarTheme(backgroundColor: Colors.grey.shade200),
       navigationBarTheme:
-          NavigationBarThemeData(backgroundColor: Colors.grey.shade800),
+          NavigationBarThemeData(backgroundColor: Colors.grey.shade200),
       bottomNavigationBarTheme:
-          BottomNavigationBarThemeData(backgroundColor: Colors.grey.shade800),
-      hintColor: Colors.orange,
+          BottomNavigationBarThemeData(backgroundColor: Colors.grey.shade200),
+      hintColor: Color.fromARGB(255, 0, 123, 192),
       toggleButtonsTheme: ToggleButtonsThemeData(color: Colors.grey.shade800),
-      textTheme: TextTheme(bodyLarge: TextStyle(color: Colors.white)));
+      textTheme: TextTheme(bodyLarge: TextStyle(color: Colors.black)));
 
   static final lightTheme = ThemeData(
       scaffoldBackgroundColor: Colors.red.shade50,

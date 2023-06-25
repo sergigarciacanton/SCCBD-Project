@@ -59,9 +59,8 @@ class _RegisterPageState extends State<RegisterPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const SizedBox(height: 50),
-                  darkTheme
-                      ? Image.asset("public/logowhite.png")
-                      : Image.asset("public/logo.png"),
+                  Image.asset(
+                      "https://drac.bsc.es/sites/default/files/content/partner/image/upc-positiu-p3005-interior-blanc.png"),
                   const Text(
                     'Register',
                     style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),

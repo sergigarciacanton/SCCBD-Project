@@ -20,7 +20,9 @@ class _MobileLayoutState extends State<MobileLayout> {
       MaterialPageRoute(
           builder: (context) => Scaffold(
                 appBar: AppBar(
-                  title: Text(component.toString()),
+                  title: Text(component.toString(),
+                      style: const TextStyle(
+                          color: Color.fromARGB(255, 0, 123, 192))),
                   actions: [
                     IconButton(
                         icon: const Icon(Icons.home),

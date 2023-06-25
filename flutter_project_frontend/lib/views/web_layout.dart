@@ -30,8 +30,8 @@ class _WebLayoutState extends State<WebLayout> {
         appBar: AppBar(
           backgroundColor: Theme.of(context).navigationBarTheme.backgroundColor,
           automaticallyImplyLeading: false,
-          title: Image.asset(
-            "public/logowhite.png",
+          title: Image.network(
+            "https://drac.bsc.es/sites/default/files/content/partner/image/upc-positiu-p3005-interior-blanc.png",
             fit: BoxFit.contain,
             height: 64,
           ),
@@ -77,13 +77,13 @@ class _WebLayoutState extends State<WebLayout> {
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text(
+                      /* Text(
                         'Chat',
                         style: TextStyle(
                             color: Theme.of(context).backgroundColor,
                             fontSize: 20,
                             fontWeight: FontWeight.bold),
-                      ),
+                      ), */
                       /* Container(
                           padding: const EdgeInsets.all(10.0),
                           //   color: Colors.red,
@@ -92,13 +92,13 @@ class _WebLayoutState extends State<WebLayout> {
                           child: ChatList(
                             setMainComponent: setMainComponent,
                           )), */
-                      Text(
+                      /* Text(
                         'Event',
                         style: TextStyle(
                             color: Theme.of(context).backgroundColor,
                             fontSize: 20,
                             fontWeight: FontWeight.bold),
-                      ),
+                      ), */
                       /* Container(
                           padding: const EdgeInsets.all(10.0),
                           height: constraints.maxHeight / 3.5,
@@ -107,13 +107,13 @@ class _WebLayoutState extends State<WebLayout> {
                           child: EventList(
                             setMainComponent: setMainComponent,
                           )), */
-                      Text(
+                      /* Text(
                         'Club',
                         style: TextStyle(
                             color: Theme.of(context).backgroundColor,
                             fontSize: 20,
                             fontWeight: FontWeight.bold),
-                      ),
+                      ), */
                       /* Container(
                           padding: const EdgeInsets.all(10.0),
                           height: constraints.maxHeight / 3.5,
